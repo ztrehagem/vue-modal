@@ -1,29 +1,38 @@
-<template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+<template lang="pug">
+div
+  button(type="button" @click.prevent="buttonA") buttonA
+  button(type="button" @click.prevent="buttonB") buttonB
+  hr
+  div
+    vue-modal(:name="modalA")
+      strong modal A
+      button(type="button" @click.prevent="$modal.pop()") pop
+      button(type="button" @click.prevent="buttonB") buttonB
+      div(v-for="i in [1,2,3,4,5,6,7,8,9,10]") {{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]
+    vue-modal(:name="modalB" disable-backdrop)
+      strong modal B
+      button(type="button" @click.prevent="$modal.pop()") pop
+      button(type="button" @click.prevent="buttonA") buttonA
+  vue-modal-backdrop
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import Vue from 'vue'
 
 export default Vue.extend({
-  name: "app",
-  components: {
-    HelloWorld
-  }
-});
+  data() {
+    return {
+      modalA: this.$modal.naming(),
+      modalB: this.$modal.naming(),
+    }
+  },
+  methods: {
+    buttonA() {
+      this.$modal.push(this.modalA)
+    },
+    buttonB() {
+      this.$modal.push(this.modalB)
+    },
+  },
+})
 </script>
-
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
