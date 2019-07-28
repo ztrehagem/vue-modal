@@ -37,7 +37,7 @@ If you need to show the backdrop, it should exist only one in the app.
   <div>
     <button type="button" @click="open">Open Modal</button>
     <vue-modal name="example">
-      <div><!-- must be slotted one element -->
+      <div>
         <p>modal content here</p>
         <button type="button" @click="close">Close Modal</button>
       </div>
@@ -78,7 +78,7 @@ export default {
 
 #### Slots
 
-- `default` - A modal content. Must be one element.
+- `default` - A modal content.
 
 ### `this.$modal` mediator
 
