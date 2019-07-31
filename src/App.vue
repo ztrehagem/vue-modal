@@ -2,28 +2,45 @@
 div
   button(type="button" @click.prevent="buttonA") buttonA
   button(type="button" @click.prevent="buttonB") buttonB
+  button(type="button" @click.prevent="buttonC") buttonC
   hr
-  div
+  .modals
     vue-modal(:name="modalA")
       strong modal A
       button(type="button" @click.prevent="$modal.pop()") pop
       button(type="button" @click.prevent="buttonB") buttonB
+      button(type="button" @click.prevent="buttonC") buttonC
       div(v-for="i in [1,2,3,4,5,6,7,8,9,10]") {{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]
     vue-modal(:name="modalB" disable-backdrop)
       strong modal B
       button(type="button" @click.prevent="$modal.pop()") pop
       button(type="button" @click.prevent="buttonA") buttonA
-  vue-modal-backdrop
+      button(type="button" @click.prevent="buttonC") buttonC
+      WithModal
+        ReqProp(prop="in modal B")
+      vue-modal(:name="modalC")
+        strong modal C
+        button(type="button" @click.prevent="$modal.pop()") pop
+        button(type="button" @click.prevent="buttonA") buttonA
+        button(type="button" @click.prevent="buttonB") buttonB
+  vue-modal-portal
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import ReqProp from '@/components/ReqProp.vue'
+import WithModal from '@/components/WithModal.vue'
 
 export default Vue.extend({
+  components: {
+    ReqProp,
+    WithModal,
+  },
   data() {
     return {
       modalA: this.$modal.naming(),
       modalB: this.$modal.naming(),
+      modalC: this.$modal.naming(),
     }
   },
   methods: {
@@ -32,6 +49,9 @@ export default Vue.extend({
     },
     buttonB() {
       this.$modal.push(this.modalB)
+    },
+    buttonC() {
+      this.$modal.push(this.modalC)
     },
   },
 })

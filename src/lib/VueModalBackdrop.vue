@@ -1,6 +1,6 @@
 <template lang="pug">
 transition(:duration="300")
-  .vue-modal-backdrop(v-if="active")
+  .vue-modal-backdrop(v-if="active" @click.stop="exit")
 </template>
 
 <script lang="ts">
@@ -9,6 +9,11 @@ export default Vue.extend({
   computed: {
     active(): boolean {
       return this.$modal.stack.length > 0
+    },
+  },
+  methods: {
+    exit() {
+      this.$modal.pop()
     },
   },
 })

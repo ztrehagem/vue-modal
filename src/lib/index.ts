@@ -1,52 +1,11 @@
-import Vue, { PluginFunction } from 'vue'
+import { PluginFunction } from 'vue'
 import VueModal from './VueModal.vue'
-import VueModalBackdrop from './VueModalBackdrop.vue'
-
-interface PublicData {
-  stack: string[]
-}
-
-interface Data extends PublicData {
-  namingId: number
-}
-
-interface Methods {
-  push(name: string): void
-  pop(): void
-  replace(name: string): void
-  naming(): string
-}
-
-type VueModalMediator = PublicData & Methods
-
-const createMediator: () => VueModalMediator = () =>
-  new Vue<Data, Methods>({
-    data: {
-      stack: [],
-      namingId: 0,
-    },
-    methods: {
-      push(name: string) {
-        if (this.stack.every(n => n !== name)) {
-          this.stack.push(name)
-        }
-      },
-      pop() {
-        this.stack.pop()
-      },
-      replace(name: string) {
-        this.stack.pop()
-        this.stack.push(name)
-      },
-      naming() {
-        return `vue-modal/${this.namingId++}`
-      },
-    },
-  })
+import VueModalPortal from './VueModalPortal.vue'
+import { createMediator, VueModalMediator } from './mediator'
 
 export interface Options {
   vueModal?: string
-  vueModalBackdrop?: string
+  vueModalPortal?: string
 }
 
 const install: PluginFunction<Options> = (Vue, options = {}) => {
@@ -57,10 +16,7 @@ const install: PluginFunction<Options> = (Vue, options = {}) => {
   const mediator = createMediator()
 
   Vue.component(options.vueModal || 'vue-modal', VueModal)
-  Vue.component(
-    options.vueModalBackdrop || 'vue-modal-backdrop',
-    VueModalBackdrop,
-  )
+  Vue.component(options.vueModalPortal || 'vue-modal-portal', VueModalPortal)
   Object.defineProperty(Vue.prototype, '$modal', {
     get() {
       return mediator
