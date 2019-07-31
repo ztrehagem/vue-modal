@@ -3,6 +3,9 @@ div
   button(type="button" @click.prevent="buttonA") buttonA
   button(type="button" @click.prevent="buttonB") buttonB
   button(type="button" @click.prevent="buttonC") buttonC
+  div
+    span BIND:
+    input(type="text" v-model="model")
   hr
   .modals
     vue-modal(:name="modalA")
@@ -10,6 +13,7 @@ div
       button(type="button" @click.prevent="$modal.pop()") pop
       button(type="button" @click.prevent="buttonB") buttonB
       button(type="button" @click.prevent="buttonC") buttonC
+      ReqProp(:prop="model")
       div(v-for="i in [1,2,3,4,5,6,7,8,9,10]") {{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]
     vue-modal(:name="modalB" disable-backdrop)
       strong modal B
@@ -17,6 +21,7 @@ div
       button(type="button" @click.prevent="buttonA") buttonA
       button(type="button" @click.prevent="buttonC") buttonC
       button(type="button" @click.prevent="actions") actions
+      ReqProp(:prop="model")
       WithModal
         ReqProp(prop="in modal B")
       vue-modal(:name="modalC")
@@ -24,6 +29,7 @@ div
         button(type="button" @click.prevent="$modal.pop()") pop
         button(type="button" @click.prevent="buttonA") buttonA
         button(type="button" @click.prevent="buttonB") buttonB
+        ReqProp(:prop="model")
   vue-modal-portal
 </template>
 
@@ -39,6 +45,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      model: 'foobar',
       modalA: this.$modal.naming(),
       modalB: this.$modal.naming(),
       modalC: this.$modal.naming(),

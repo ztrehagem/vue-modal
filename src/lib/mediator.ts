@@ -1,7 +1,7 @@
 import Vue, { VNode } from 'vue'
 
 export interface ModalMetadata {
-  children: VNode[]
+  children?: VNode[]
   disableBackdrop: boolean
 }
 
@@ -20,16 +20,15 @@ interface Methods {
   replace(name: string): void
   naming(): string
   register(name: string, metadata: ModalMetadata): void
+  update(name: string, metadata: ModalMetadata): void
   unregister(name: string): void
 }
 
-export type EventName = 'afterLeave'
-
 export interface EventEmitter {
-  $emit(eventName: EventName, modalName: string): void
-  $on(eventName: EventName, fn: (modalName: string) => void): void
-  $once(eventName: EventName, fn: (modalName: string) => void): void
-  $off(eventName: EventName): void
+  $emit(eventName: 'afterLeave', modalName: string): void
+  $on(eventName: 'afterLeave', fn: (modalName: string) => void): void
+  $once(eventName: 'afterLeave', fn: (modalName: string) => void): void
+  $off(eventName: 'afterLeave'): void
 }
 
 export type VueModalMediator = PublicData & Methods & EventEmitter
@@ -58,6 +57,9 @@ export const createMediator: () => VueModalMediator = () =>
         return `vue-modal/${this.namingId++}`
       },
       register(name, metadata) {
+        this.$set(this.pool, name, metadata)
+      },
+      update(name, metadata) {
         this.$set(this.pool, name, metadata)
       },
       unregister(name) {
