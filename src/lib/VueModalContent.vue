@@ -31,6 +31,10 @@ export default Vue.extend({
     isStacked() {
       if (this.isStacked) {
         this.isPlaced = true
+      } else {
+        this.$modal.$once('afterLeave', name => {
+          if (!this.isStacked) this.isPlaced = false
+        })
       }
     },
   },
@@ -41,9 +45,7 @@ export default Vue.extend({
       }
     },
     afterLeave() {
-      if (!this.isStacked) {
-        this.isPlaced = false
-      }
+      this.$modal.$emit('afterLeave', this.name)
     },
   },
 })

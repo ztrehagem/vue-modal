@@ -16,6 +16,7 @@ div
       button(type="button" @click.prevent="$modal.pop()") pop
       button(type="button" @click.prevent="buttonA") buttonA
       button(type="button" @click.prevent="buttonC") buttonC
+      button(type="button" @click.prevent="actions") actions
       WithModal
         ReqProp(prop="in modal B")
       vue-modal(:name="modalC")
@@ -52,6 +53,12 @@ export default Vue.extend({
     },
     buttonC() {
       this.$modal.push(this.modalC)
+    },
+    async actions() {
+      this.$modal.push(this.modalC)
+      await new Promise(res => setTimeout(res, 1000))
+      this.$modal.pop()
+      this.$modal.replace(this.modalA)
     },
   },
 })

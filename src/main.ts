@@ -4,6 +4,10 @@ import './plugins/vue-modal'
 
 Vue.config.productionTip = false
 
-new Vue({
+const app = new Vue({
   render: h => h(App),
 }).$mount('#app')
+
+Object.defineProperty(window, 'app', {
+  value: app,
+})
