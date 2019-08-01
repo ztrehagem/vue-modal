@@ -8,6 +8,12 @@ A simple modal component inspired by [vue-thin-modal](https://github.com/ktsn/vu
 npm install @ztrehagem/vue-modal
 ```
 
+## Features
+- The `$modal` mediator global injected controls modals with stack.
+- It can be nesting-placed modal.
+  - The nested modal is ready to appear only if its parent modal is in stack.
+    This means must not do `pop()` or `replace()` the parent modal while the nested modal is appear.
+
 ## Usage
 
 1. Activate this plugin.
