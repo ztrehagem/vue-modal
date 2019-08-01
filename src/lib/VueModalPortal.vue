@@ -22,9 +22,6 @@ const mapObject = <T extends object, K extends keyof T, R>(
 
 export default Vue.extend({
   render(h) {
-    // const pool = filterObject(this.$modal.pool, (_, name) => this.$modal.stack.indexOf(name) >= 0)
-    // console.log(this.$modal.pool, pool)
-
     return h(
       'div',
       {
@@ -33,7 +30,11 @@ export default Vue.extend({
       [
         h(VueModalBackdrop),
         ...mapObject(this.$modal.pool, (modal, name) =>
-          h(VueModalContent, { props: { name } }, modal.children),
+          h(
+            VueModalContent,
+            { props: { name, disableBackdrop: modal.disableBackdrop } },
+            modal.children,
+          ),
         ),
       ],
     )
