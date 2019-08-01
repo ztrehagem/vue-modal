@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from 'vue'
-import { ModalMetadata } from './mediator'
 
 export default Vue.extend({
   props: {
@@ -28,7 +27,10 @@ export default Vue.extend({
     createMetadata() {
       return {
         children: this.$slots.default,
-        disableBackdrop: this.disableBackdrop,
+        props: {
+          name: this.name,
+          disableBackdrop: this.disableBackdrop,
+        },
       }
     },
   },

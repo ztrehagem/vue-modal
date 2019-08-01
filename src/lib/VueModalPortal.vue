@@ -2,39 +2,19 @@
 import Vue from 'vue'
 import VueModalContent from './VueModalContent.vue'
 import VueModalBackdrop from './VueModalBackdrop.vue'
-import { ModalMetadata } from './mediator'
-
-const filterObject = <T extends object, K extends keyof T>(
-  obj: T,
-  fn: (value: T[K], key: K) => boolean,
-) => {
-  return (Object.keys(obj) as K[])
-    .filter(key => fn(obj[key], key))
-    .reduce((dest, key) => (dest[key] = obj[key]), {} as Partial<T>)
-}
-
-const mapObject = <T extends object, K extends keyof T, R>(
-  obj: T,
-  fn: (value: T[K], key: K) => R,
-) => {
-  return (Object.keys(obj) as K[]).map<R>(key => fn(obj[key], key))
-}
+import { mapObject } from './utils'
 
 export default Vue.extend({
   render(h) {
     return h(
       'div',
       {
-        staticClass: 'vue-modal-content',
+        staticClass: 'vue-modal-portal',
       },
       [
         h(VueModalBackdrop),
-        ...mapObject(this.$modal.pool, (modal, name) =>
-          h(
-            VueModalContent,
-            { props: { name, disableBackdrop: modal.disableBackdrop } },
-            modal.children,
-          ),
+        ...mapObject(this.$modal.pool, modal =>
+          h(VueModalContent, { props: modal.props }, modal.children),
         ),
       ],
     )

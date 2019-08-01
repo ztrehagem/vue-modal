@@ -2,7 +2,10 @@ import Vue, { VNode } from 'vue'
 
 export interface ModalMetadata {
   children?: VNode[]
-  disableBackdrop: boolean
+  props: {
+    name: string
+    disableBackdrop: boolean
+  }
 }
 
 interface PublicData {
