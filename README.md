@@ -9,62 +9,65 @@ npm install @ztrehagem/vue-modal
 ```
 
 ## Features
+
 - The `$modal` mediator global injected controls modals with stack.
+
 - It can be nesting-placed modal.
-  - The nested modal is ready to appear only if its parent modal is in stack.
-    This means must not do `pop()` or `replace()` the parent modal while the nested modal is appear.
+
+  The nested modal is ready to appear only if its parent modal is in stack.
+  This means must not do `pop()` or `replace()` the parent modal while the nested modal is appear.
 
 ## Usage
 
-1. Activate this plugin.
+- First, Activate this plugin.
 
-```ts
-import Vue from 'vue'
-import VueModal from '@ztrehagem/vue-modal'
-import '@ztrehagem/vue-modal/dist/vue-modal.css' // optional
+  ```ts
+  import Vue from 'vue'
+  import VueModal from '@ztrehagem/vue-modal'
+  import '@ztrehagem/vue-modal/dist/vue-modal.css' // optional
 
-Vue.use(VueModal)
-```
+  Vue.use(VueModal)
+  ```
 
-It's able to pass some options like:
+  It's able to pass some options like:
 
-```ts
-Vue.use(VueModal, {
-  vueModal: 'vue-modal',
-  vueModalBackdrop: 'vue-modal-backdrop',
-})
-```
+  ```ts
+  Vue.use(VueModal, {
+    vueModal: 'vue-modal',
+    vueModalPortal: 'vue-modal-portal',
+  })
+  ```
 
-2. The components `vue-modal` and `vue-modal-backdrop` are available in your app.
-If you need to show the backdrop, it should exist only one in the app.
+- Then, The components `vue-modal` and `vue-modal-portal` are available in your app.
+  The component `vue-modal-portal` should exist only one in the app.
 
-```html
-<template>
-  <div>
-    <button type="button" @click="open">Open Modal</button>
-    <vue-modal name="example">
-      <div>
-        <p>modal content here</p>
-        <button type="button" @click="close">Close Modal</button>
-      </div>
-    </vue-modal>
-    <vue-modal-backdrop />
-  </div>
-</template>
+  ```html
+  <template>
+    <div>
+      <button type="button" @click="open">Open Modal</button>
+      <vue-modal name="example">
+        <div>
+          <p>modal content here</p>
+          <button type="button" @click="close">Close Modal</button>
+        </div>
+      </vue-modal>
+      <vue-modal-portal />
+    </div>
+  </template>
 
-<script>
-export default {
-  methods: {
-    open() {
-      this.$modal.push('example')
-    },
-    close() {
-      this.$modal.pop()
+  <script>
+  export default {
+    methods: {
+      open() {
+        this.$modal.push('example')
+      },
+      close() {
+        this.$modal.pop()
+      }
     }
   }
-}
-</script>
-```
+  </script>
+  ```
 
 ## API
 
