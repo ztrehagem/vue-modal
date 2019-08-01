@@ -1,8 +1,8 @@
 <template lang="pug">
-.vue-modal-content
+.vue-modal
   transition(:duration="300" @after-leave="afterLeave")
-    .vue-modal-content__wrapper(v-if="isPlaced" v-show="isStackedTop" @click.stop="backdrop")
-      .vue-modal-content__content(@click.stop="")
+    .vue-modal__wrapper(v-if="isPlaced" v-show="isStackedTop" @click.stop="backdrop")
+      .vue-modal__content(@click.stop="")
         slot
 </template>
 
@@ -51,8 +51,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="stylus" scoped>
-.vue-modal-content
+<style lang="stylus">
+.vue-modal
   &__wrapper
     overflow auto
     position fixed

@@ -19,7 +19,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .vue-modal-backdrop
   &
     opacity 1
