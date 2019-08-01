@@ -2,46 +2,26 @@
 import Vue from 'vue'
 import { ModalMetadata } from './mediator'
 
-interface Data {
-  metadata: ModalMetadata
-}
-
 export default Vue.extend({
   props: {
     name: { type: String, required: true },
     disableBackdrop: { type: Boolean, default: false },
   },
-  data(): Data {
+  data() {
     return {
-      metadata: {
-        disableBackdrop: this.disableBackdrop,
-      },
+      updatedFlag: false,
     }
   },
-  computed: {
-    // metadata(): ModalMetadata {
-    //   return {
-    //     children: this.$slots.default || [],
-    //     disableBackdrop: this.disableBackdrop,
-    //   }
-    // },
-  },
   created() {
-    // this.metadata = this.createMetadata()
-    this.$set(this.metadata, 'children', this.$slots.default)
-    this.$modal.register(this.name, this.metadata)
-    debugger
-  },
-  beforeMount() {
-    debugger
+    this.$modal.register(this.name, this.createMetadata())
   },
   updated() {
-    console.log('updated', this.name)
-    this.$set(this.metadata, 'children', this.$slots.default)
-    this.$modal.update(this.name, this.metadata)
+    if (this.updatedFlag) return
+    this.updatedFlag = true
+    this.$modal.update(this.name, this.createMetadata())
+    this.$nextTick(() => (this.updatedFlag = false))
   },
   beforeDestroy() {
-    console.log('unregister!', this.name)
     this.$modal.unregister(this.name)
   },
   methods: {
@@ -53,9 +33,6 @@ export default Vue.extend({
     },
   },
   render(h) {
-    console.log('render', this.name)
-    // this.metadata = this.createMetadata()
-    // this.$set(this.metadata, 'children', this.$slots.default)
     return h()
   },
 })
