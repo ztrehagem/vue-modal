@@ -1,4 +1,8 @@
 import Vue from 'vue'
-import VueModal from '../lib'
+import VueModal, { Options, createMediator } from '../lib'
 
-Vue.use(VueModal)
+const mediator = createMediator()
+
+Vue.use<Options>(VueModal, { mediator })
+
+export default mediator

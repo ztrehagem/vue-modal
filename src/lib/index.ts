@@ -1,4 +1,4 @@
-import { PluginFunction } from 'vue'
+import { PluginFunction, PluginObject } from 'vue'
 import VueModal from './VueModal.vue'
 import VueModalPortal from './VueModalPortal.vue'
 import { createMediator, VueModalMediator } from './mediator'
@@ -6,6 +6,7 @@ import { createMediator, VueModalMediator } from './mediator'
 export interface Options {
   vueModal?: string
   vueModalPortal?: string
+  mediator?: VueModalMediator
 }
 
 const install: PluginFunction<Options> = (Vue, options = {}) => {
@@ -13,7 +14,7 @@ const install: PluginFunction<Options> = (Vue, options = {}) => {
     return
   }
 
-  const mediator = createMediator()
+  const mediator = options.mediator || createMediator()
 
   Vue.component(options.vueModal || 'vue-modal', VueModal)
   Vue.component(options.vueModalPortal || 'vue-modal-portal', VueModalPortal)
@@ -24,12 +25,12 @@ const install: PluginFunction<Options> = (Vue, options = {}) => {
   })
 }
 
+export default { install }
+
+export { createMediator }
+
 declare module 'vue/types/vue' {
   interface Vue {
     readonly $modal: VueModalMediator
   }
-}
-
-export default {
-  install,
 }
