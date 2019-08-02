@@ -1,5 +1,5 @@
 <template lang="pug">
-.vue-modal
+.vue-modal(:data-modal-name="name")
   transition(:duration="300" @after-leave="afterLeave")
     .vue-modal__wrapper(v-if="isPlaced" v-show="isStackedTop" @click.stop="backdrop")
       .vue-modal__content(@click.stop="")
