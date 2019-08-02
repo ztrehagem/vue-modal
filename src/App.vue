@@ -3,6 +3,9 @@ div
   button(type="button" @click.prevent="buttonA") buttonA
   button(type="button" @click.prevent="buttonB") buttonB
   button(type="button" @click.prevent="buttonC") buttonC
+  hr
+  button(type="button" @click.prevent="outer") outer
+  hr
   div
     span BIND:
     input(type="text" v-model="model")
@@ -30,6 +33,7 @@ div
         button(type="button" @click.prevent="buttonA") buttonA
         button(type="button" @click.prevent="buttonB") buttonB
         ReqProp(:prop="model")
+  div(v-for="i in [1,2,3,4,5,6,7,8,9,10]") {{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]
   vue-modal-portal
 </template>
 
@@ -37,6 +41,7 @@ div
 import Vue from 'vue'
 import ReqProp from '@/components/ReqProp.vue'
 import WithModal from '@/components/WithModal.vue'
+import modal from '@/plugins/vue-modal'
 
 export default Vue.extend({
   components: {
@@ -60,6 +65,9 @@ export default Vue.extend({
     },
     buttonC() {
       this.$modal.push(this.modalC)
+    },
+    outer() {
+      modal.push(this.modalA)
     },
     async actions() {
       this.$modal.push(this.modalC)

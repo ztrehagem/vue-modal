@@ -43,6 +43,15 @@ export const createMediator: () => VueModalMediator = () =>
       namingId: 0,
       pool: {},
     },
+    watch: {
+      stack() {
+        if (this.stack.length) {
+          window.document.body.style.overflow = 'hidden'
+        } else {
+          window.document.body.style.overflow = null
+        }
+      },
+    },
     methods: {
       push(name) {
         if (this.stack.every(n => n !== name)) {
