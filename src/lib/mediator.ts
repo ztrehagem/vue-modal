@@ -21,6 +21,7 @@ interface Methods {
   push(name: string): void
   pop(): void
   replace(name: string): void
+  flush(): void
   naming(): string
   register(name: string, metadata: ModalMetadata): void
   update(name: string, metadata: ModalMetadata): void
@@ -64,6 +65,9 @@ export const createMediator: () => VueModalMediator = () =>
       replace(name) {
         this.stack.pop()
         this.stack.push(name)
+      },
+      flush() {
+        this.stack.splice(0, Infinity)
       },
       naming() {
         return `vue-modal/${this.namingId++}`

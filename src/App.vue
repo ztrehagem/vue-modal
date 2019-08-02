@@ -32,6 +32,7 @@ div
         button(type="button" @click.prevent="$modal.pop()") pop
         button(type="button" @click.prevent="buttonA") buttonA
         button(type="button" @click.prevent="buttonB") buttonB
+        button(type="button" @click.prevent="flush") flush
         ReqProp(:prop="model")
   div(v-for="i in [1,2,3,4,5,6,7,8,9,10]") {{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]{{i}}#[br]
   vue-modal-portal
@@ -68,6 +69,9 @@ export default Vue.extend({
     },
     outer() {
       modal.push(this.modalA)
+    },
+    flush() {
+      this.$modal.flush()
     },
     async actions() {
       this.$modal.push(this.modalC)
