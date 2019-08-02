@@ -13,8 +13,8 @@ export default Vue.extend({
       },
       [
         h(VueModalBackdrop),
-        ...mapObject(this.$modal.pool, modal =>
-          h(VueModalContent, { props: modal.props }, modal.children),
+        ...mapObject(this.$modal.pool, (modal, name) =>
+          h(VueModalContent, { key: name, props: modal.props }, modal.children),
         ),
       ],
     )
