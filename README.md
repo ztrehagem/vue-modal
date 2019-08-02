@@ -19,59 +19,88 @@ npm install @ztrehagem/vue-modal
 
 ## Usage
 
-- First, Activate this plugin.
+First, activate this plugin.
+
+```ts
+import Vue from 'vue'
+import VueModal from '@ztrehagem/vue-modal'
+import '@ztrehagem/vue-modal/dist/vue-modal.css' // optional
+
+Vue.use(VueModal)
+```
+
+Then, the components `vue-modal` and `vue-modal-portal` are available in your app.
+The component `vue-modal-portal` should exist only one in the app.
+
+```html
+<template>
+  <div>
+    <button type="button" @click="open">Open Modal</button>
+    <vue-modal name="example">
+      <div>
+        <p>modal content here</p>
+        <button type="button" @click="close">Close Modal</button>
+      </div>
+    </vue-modal>
+    <vue-modal-portal />
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    open() {
+      this.$modal.push('example')
+    },
+    close() {
+      this.$modal.pop()
+    }
+  }
+}
+</script>
+```
+
+## Advanced Usage
+
+###
+
+- A way to access the mediator from out of Vue's lifecycle:
 
   ```ts
   import Vue from 'vue'
-  import VueModal from '@ztrehagem/vue-modal'
-  import '@ztrehagem/vue-modal/dist/vue-modal.css' // optional
+  import VueModal, { createMediator } from '@ztrehagem/vue-modal'
 
-  Vue.use(VueModal)
+  const mediator = createMediator()
+
+  Vue.use(VueModal, { mediator })
+
+  export default mediator
   ```
-
-  It's able to pass some options like:
 
   ```ts
-  Vue.use(VueModal, {
-    vueModal: 'vue-modal',
-    vueModalPortal: 'vue-modal-portal',
-  })
+  import modal from './path/to/that'
+
+  modal.pop()
+  modal.flush()
   ```
 
-- Then, The components `vue-modal` and `vue-modal-portal` are available in your app.
-  The component `vue-modal-portal` should exist only one in the app.
 
-  ```html
-  <template>
-    <div>
-      <button type="button" @click="open">Open Modal</button>
-      <vue-modal name="example">
-        <div>
-          <p>modal content here</p>
-          <button type="button" @click="close">Close Modal</button>
-        </div>
-      </vue-modal>
-      <vue-modal-portal />
-    </div>
-  </template>
-
-  <script>
-  export default {
-    methods: {
-      open() {
-        this.$modal.push('example')
-      },
-      close() {
-        this.$modal.pop()
-      }
-    }
-  }
-  </script>
-  ```
 
 ## API
 
-### `<vue-modal>` component
+### Options
+
+- `vueModal`? : string | undefined, default: `'vue-modal'`
+- `vueModalPortal`? : string | undefined, default: `'vue-modal-portal'`
+
+  Providing custom name for the components.
+
+- `mediator`? : VueModalMediator, default: `createMediator()`
+
+  A mediator object.
+
+
+### Component `vue-modal`
 
 #### Props
 
@@ -89,7 +118,7 @@ npm install @ztrehagem/vue-modal
 
 - `default` - A modal content.
 
-### `this.$modal` mediator
+### Mediator `$modal`
 
 #### Properties
 
@@ -110,6 +139,10 @@ npm install @ztrehagem/vue-modal
 - `replace` : (name: string) => void
 
   It does `pop()` and `push(name)`.
+
+- `flush` : () => void
+
+  Hide the all modals in stack.
 
 - `naming` : () => string
 
