@@ -75,8 +75,8 @@ export function createMediator(): VueModalMediator {
         this.$emit('popped', name)
       },
       replace(name) {
-        this.stack.pop()
-        this.stack.push(name)
+        this.pop()
+        this.push(name)
       },
       flush() {
         this.stack.splice(0, Infinity)
