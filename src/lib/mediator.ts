@@ -33,7 +33,7 @@ interface Methods {
   unregister(name: string): void
 }
 
-export type EventName = 'pushed' | 'poped' | 'afterLeave'
+export type EventName = 'pushed' | 'popped' | 'afterLeave'
 
 export interface EventEmitter {
   $emit(eventName: EventName, modalName: string): void
@@ -72,7 +72,7 @@ export function createMediator(): VueModalMediator {
         if (!this.stack.length) {
           window.document.body.style.overflow = null
         }
-        this.$emit('poped', name)
+        this.$emit('popped', name)
       },
       replace(name) {
         this.stack.pop()
