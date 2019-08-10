@@ -21,7 +21,7 @@ export default Vue.extend({
   },
   computed: {
     isStacked(): boolean {
-      return this.$modal.stack.indexOf(this.name) >= 0
+      return this.$modal.isStacked(this.name)
     },
     isCurrent(): boolean {
       return this.$modal.current === this.name

@@ -26,6 +26,7 @@ interface Methods {
   pop(): void
   replace(name: string): void
   flush(): void
+  isStacked(name: string): boolean
   naming(): string
   register(name: string, metadata: ModalMetadata): void
   update(name: string, metadata: ModalMetadata): void
@@ -79,6 +80,9 @@ export function createMediator(): VueModalMediator {
       },
       flush() {
         this.stack.splice(0, Infinity)
+      },
+      isStacked(name) {
+        return this.stack.indexOf(name) >= 0
       },
       naming() {
         return `vue-modal/${this.namingId++}`
