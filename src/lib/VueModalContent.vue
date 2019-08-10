@@ -1,7 +1,7 @@
 <template lang="pug">
 .vue-modal(:data-modal-name="name")
   transition(:duration="300" @after-leave="afterLeave")
-    .vue-modal__wrapper(v-if="isPlaced" v-show="isStackedTop" @click.stop="backdrop")
+    .vue-modal__wrapper(v-if="isAppeared" v-show="isCurrent" @click.stop="backdrop")
       .vue-modal__content(@click.stop="")
         slot
 </template>
@@ -16,27 +16,22 @@ export default Vue.extend({
   },
   data() {
     return {
-      isPlaced: false,
+      isAppeared: false,
     }
   },
   computed: {
     isStacked(): boolean {
       return this.$modal.stack.indexOf(this.name) >= 0
     },
-    isStackedTop(): boolean {
-      return this.$modal.stack[this.$modal.stack.length - 1] === this.name
+    isCurrent(): boolean {
+      return this.$modal.current === this.name
     },
   },
-  watch: {
-    isStacked() {
-      if (this.isStacked) {
-        this.isPlaced = true
-      } else {
-        this.$modal.$once('afterLeave', name => {
-          if (!this.isStacked) this.isPlaced = false
-        })
-      }
-    },
+  created() {
+    this.$modal.$on('pushed', this.onPushed)
+  },
+  destroyed() {
+    this.$modal.$off('pushed', this.onPushed)
   },
   methods: {
     backdrop() {
@@ -44,7 +39,15 @@ export default Vue.extend({
         this.$modal.pop()
       }
     },
+    onPushed(name: string) {
+      if (this.name === name) {
+        this.isAppeared = true
+      }
+    },
     afterLeave() {
+      if (!this.isStacked) {
+        this.isAppeared = false
+      }
       this.$modal.$emit('afterLeave', this.name)
     },
   },

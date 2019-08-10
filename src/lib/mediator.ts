@@ -17,6 +17,10 @@ interface Data extends PublicData {
   namingId: number
 }
 
+interface Computed {
+  current: string | undefined
+}
+
 interface Methods {
   push(name: string): void
   pop(): void
@@ -28,39 +32,46 @@ interface Methods {
   unregister(name: string): void
 }
 
+export type EventName = 'pushed' | 'poped' | 'afterLeave'
+
 export interface EventEmitter {
-  $emit(eventName: 'afterLeave', modalName: string): void
-  $on(eventName: 'afterLeave', fn: (modalName: string) => void): void
-  $once(eventName: 'afterLeave', fn: (modalName: string) => void): void
-  $off(eventName: 'afterLeave'): void
+  $emit(eventName: EventName, modalName: string): void
+  $on(eventName: EventName, fn: (modalName: string) => void): void
+  $once(eventName: EventName, fn: (modalName: string) => void): void
+  $off(eventName: EventName, fn?: (modalName: string) => void): void
 }
 
-export type VueModalMediator = PublicData & Methods & EventEmitter
+export type VueModalMediator = PublicData & Methods & Computed & EventEmitter
 
-export const createMediator: () => VueModalMediator = () =>
-  new Vue<Data, Methods>({
+export function createMediator(): VueModalMediator {
+  return new Vue<Data, Methods, {}, Computed>({
     data: {
       stack: [],
       namingId: 0,
       pool: {},
     },
-    watch: {
-      stack() {
-        if (this.stack.length) {
-          window.document.body.style.overflow = 'hidden'
-        } else {
-          window.document.body.style.overflow = null
-        }
+    computed: {
+      current(): string | undefined {
+        return this.stack.slice(-1).pop()
       },
     },
     methods: {
       push(name) {
         if (this.stack.every(n => n !== name)) {
           this.stack.push(name)
+          window.document.body.style.overflow = 'hidden'
+          this.$emit('pushed', name)
         }
       },
       pop() {
-        this.stack.pop()
+        if (!this.stack.length) {
+          return
+        }
+        const name = this.stack.pop()
+        if (!this.stack.length) {
+          window.document.body.style.overflow = null
+        }
+        this.$emit('poped', name)
       },
       replace(name) {
         this.stack.pop()
@@ -83,3 +94,4 @@ export const createMediator: () => VueModalMediator = () =>
       },
     },
   })
+}
