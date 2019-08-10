@@ -126,6 +126,10 @@ export default {
 
   A stack of pushed modal names.
 
+- `current` : string
+
+  The modal name stacked on top.
+
 #### Methods
 
 - `push` : (name: string) => void
@@ -144,6 +148,10 @@ export default {
 
   Hide the all modals in stack.
 
+- `isStacked` : (name: string) => boolean
+
+  Whether the modal is in the stack.
+
 - `naming` : () => string
 
   It generates a unique name. Use like:
@@ -161,3 +169,17 @@ export default {
     }
   </script>
   ```
+
+### Events
+
+- `pushed` : (name: string)
+
+  When a new modal is pushed.
+
+- `popped` : (name: string)
+
+  When a stacked modal is popped.
+
+- `afterLeave` : (name: string)
+
+  When a popped modal is disappeared from the DOM tree.
