@@ -1,7 +1,7 @@
 <template lang="pug">
 .vue-modal(:data-modal-name="name")
   transition(:duration="300" @after-leave="afterLeave")
-    .vue-modal__wrapper(v-if="isAppeared" v-show="isCurrent" @click.stop="backdrop")
+    .vue-modal__wrapper(v-if="isPlaced" v-show="isCurrent" @click.stop="backdrop")
       .vue-modal__content(@click.stop="")
         slot
 </template>
@@ -16,13 +16,10 @@ export default Vue.extend({
   },
   data() {
     return {
-      isAppeared: false,
+      isPlaced: false,
     }
   },
   computed: {
-    isStacked(): boolean {
-      return this.$modal.isStacked(this.name)
-    },
     isCurrent(): boolean {
       return this.$modal.current === this.name
     },
@@ -41,12 +38,12 @@ export default Vue.extend({
     },
     onPushed(name: string) {
       if (this.name === name) {
-        this.isAppeared = true
+        this.isPlaced = true
       }
     },
     afterLeave() {
-      if (!this.isStacked) {
-        this.isAppeared = false
+      if (!this.$modal.isStacked(this.name)) {
+        this.isPlaced = false
       }
       this.$modal.$emit('afterLeave', this.name)
     },
