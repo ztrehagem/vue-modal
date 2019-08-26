@@ -70,7 +70,7 @@ export function createMediator(): VueModalMediator {
         }
         const name = this.stack.pop()
         if (!this.stack.length) {
-          window.document.body.style.overflow = null
+          window.document.body.style.overflow = ''
         }
         this.$emit('popped', name)
       },
