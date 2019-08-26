@@ -1,6 +1,6 @@
 {
   "name": "@ztrehagem/vue-modal",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A simple modal component of Vue.js",
   "keywords": [
     "modal",
