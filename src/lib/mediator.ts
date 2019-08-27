@@ -79,7 +79,9 @@ export function createMediator(): VueModalMediator {
         this.push(name)
       },
       flush() {
-        this.stack.splice(0, Infinity)
+        while (this.current) {
+          this.pop()
+        }
       },
       isStacked(name) {
         return this.stack.indexOf(name) >= 0
