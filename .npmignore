@@ -3,5 +3,6 @@
 .browserslistrc
 .eslintrc.js
 .prettierrc.json
+.node-version
 babel.config.js
 tsconfig.json
