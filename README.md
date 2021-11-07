@@ -1,6 +1,6 @@
 # @ztrehagem/vue-modal
 
-A simple modal component inspired by [vue-thin-modal](https://github.com/ktsn/vue-thin-modal).
+Stack-managed styleless modal library for Vue.js.
 
 ## Installation
 
@@ -10,174 +10,48 @@ npm install @ztrehagem/vue-modal
 
 ## Features
 
-- The `$modal` mediator global injected controls modals with stack.
-
-- It can be nesting-placed modal.
-
-  The nested modal is ready to appear only if its parent modal is in stack.
-  This means must not do `pop()` or `replace()` the parent modal while the nested modal is appear.
+The modals are managed as stack structure with functions such as push and pop.
+Only the top of stack is always rendered.
+State of stacked modals are kept for each instances by using `<keep-alive>`.
+In addition, multiple instances of same modal component can be in the stack.
 
 ## Usage
 
-First, activate this plugin.
-
 ```ts
 import Vue from "vue";
-import VueModal from "@ztrehagem/vue-modal";
-import "@ztrehagem/vue-modal/dist/vue-modal.css"; // optional
+import * as modal from "@ztrehagem/vue-modal";
 
-Vue.use(VueModal);
+// Optional. For using default components.
+import "@ztrehagem/vue-modal/dist/vue-modal.css";
+
+// Import your modal components.
+import HelloModal from "@/components/HelloModal.vue";
+
+// Define id and arguments of each modals.
+// In this example, there is `hello` modal with an argument `{ nickname: string }`.
+export interface ModalTypes extends modal.ModalTypes {
+  hello: { nickname: string };
+}
+
+export const modalManager = new modal.ModalManager<ModalTypes>();
+
+// Associate your Vue components with ids defined above.
+modalManager.addComponent("hello", HelloModal);
+
+Vue.use(modal.plugin, { manager: modalManager });
+
+declare module "vue/types/vue" {
+  interface Vue {
+    readonly $modal: typeof modalManager;
+  }
+}
 ```
 
-Then, the components `vue-modal` and `vue-modal-portal` are available in your app.
-The component `vue-modal-portal` should exist only one in the app.
+The `Modal` and `ModalBackdrop` components can be replaced your component.
+In that case, please reference implementation of default components.
 
-```html
-<template>
-  <div>
-    <button type="button" @click="open">Open Modal</button>
-    <vue-modal name="example">
-      <div>
-        <p>modal content here</p>
-        <button type="button" @click="close">Close Modal</button>
-      </div>
-    </vue-modal>
-    <vue-modal-portal />
-  </div>
-</template>
-
-<script>
-  export default {
-    methods: {
-      open() {
-        this.$modal.push("example");
-      },
-      close() {
-        this.$modal.pop();
-      },
-    },
-  };
-</script>
-```
-
-## Advanced Usage
-
-###
-
-- A way to access the mediator from out of Vue's lifecycle:
-
-  ```ts
-  import Vue from "vue";
-  import VueModal, { createMediator } from "@ztrehagem/vue-modal";
-
-  const mediator = createMediator();
-
-  Vue.use(VueModal, { mediator });
-
-  export default mediator;
-  ```
-
-  ```ts
-  import modal from "./path/to/that";
-
-  modal.pop();
-  modal.flush();
-  ```
+WIP
 
 ## API
 
-### Options
-
-- `vueModal`? : string | undefined, default: `'vue-modal'`
-- `vueModalPortal`? : string | undefined, default: `'vue-modal-portal'`
-
-  Providing custom name for the components.
-
-- `mediator`? : VueModalMediator, default: `createMediator()`
-
-  A mediator object.
-
-### Component `vue-modal`
-
-#### Props
-
-- `name` - String, required
-
-  Required as the modal name.
-  The `name` must be unique against every modal you would use.
-  The `naming` function is useful for giving unique name to each modals as mentioned later.
-
-- `disable-backdrop` - Boolean, default: `false`
-
-  It disables to close the modal by clicking the backdrop.
-
-#### Slots
-
-- `default` - A modal content.
-
-### Mediator `$modal`
-
-#### Properties
-
-- `stack` : string[]
-
-  A stack of pushed modal names.
-
-- `current` : string
-
-  The modal name stacked on top.
-
-#### Methods
-
-- `push` : (name: string) => void
-
-  Show the modal that cooresponding with the `name`.
-
-- `pop` : () => void
-
-  Hide the modal that is appearing.
-
-- `replace` : (name: string) => void
-
-  It does `pop()` and `push(name)`.
-
-- `flush` : () => void
-
-  Hide the all modals in stack.
-
-- `isStacked` : (name: string) => boolean
-
-  Whether the modal is in the stack.
-
-- `naming` : () => string
-
-  It generates a unique name. Use like:
-
-  ```html
-  <script>
-    export default {
-      data() {
-        modalName: this.$modal.naming();
-      },
-      methods: {
-        openModal() {
-          this.$modal.push(this.modalName);
-        },
-      },
-    };
-  </script>
-  ```
-
-### Events
-
-- `pushed` : (name: string)
-
-  When a new modal is pushed.
-
-- `popped` : (name: string)
-
-  When a stacked modal is popped.
-
-- `afterLeave` : (name: string)
-
-  When a popped modal is disappeared from the DOM tree.
+WIP

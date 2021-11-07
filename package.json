@@ -1,7 +1,7 @@
 {
   "name": "@ztrehagem/vue-modal",
   "version": "0.4.3",
-  "description": "A simple modal component of Vue.js",
+  "description": "Stack-managed styleless modal library for Vue.js.",
   "author": {
     "email": "shigeki.suwa@ztrehagem.dev",
     "name": "Shigeki Suwa",
