@@ -40,40 +40,54 @@ export class ModalManager<
     this.#components.set(name, component);
   }
 
-  push<K extends Key>(name: K, args: Types[K]): void {
+  push<K extends Key>(
+    name: K,
+    args: Types[K]
+  ): ModalInstance<Types, Key> | null {
     const component = this.#components.get(name);
     if (!component) {
       // console.error(`No component for '${this.$modal.top.name}' is provided to $modal`)
-      return;
+      return null;
     }
 
     const instanceId = `${name}-${this.stack.length}`;
     const namedComponent = Vue.extend(component).extend({ name: instanceId });
 
-    this.#state.stack.push({
+    const instance: ModalInstance<Types, Key> = {
       name,
       instanceId,
       component: namedComponent,
-      args: Vue.observable(args),
-    });
+      args,
+    };
+
+    this.#state.stack.push(instance);
 
     if (this.stack.length === 1) {
       freezeBody();
     }
+
+    return instance;
   }
 
-  pop<K extends Key>(name?: K): Key | null {
+  pop<K extends Key>(name?: K): ModalInstance<Types, Key> | null {
     if (name && this.top?.name !== name) return null;
-    const popped = this.#state.stack.pop()?.name ?? null;
+    const popped = this.#state.stack.pop() ?? null;
     if (this.stack.length === 0) {
       unfreezeBody();
     }
     return popped;
   }
 
-  replace<K extends Key>(name: K, args: Types[K]): void {
-    this.pop();
-    this.push(name, args);
+  replace<K extends Key>(
+    name: K,
+    args: Types[K]
+  ): {
+    pushed: ModalInstance<Types, Key> | null;
+    popped: ModalInstance<Types, Key> | null;
+  } {
+    const popped = this.pop();
+    const pushed = this.push(name, args);
+    return { pushed, popped };
   }
 
   flush(): void {
