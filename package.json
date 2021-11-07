@@ -47,7 +47,7 @@
     "vue-template-compiler": "2.6.0"
   },
   "peerDependencies": {
-    "vue": "^2.5.0"
+    "vue": "^2.6.0"
   },
   "bugs": "https://github.com/ztrehagem/vue-modal/issues",
   "homepage": "https://github.com/ztrehagem/vue-modal",
