@@ -19,7 +19,7 @@ In addition, multiple instances of same modal component can be in the stack.
 
 ```ts
 import Vue from "vue";
-import * as modal from "@ztrehagem/vue-modal";
+import VueModal, { ModalManager } from "@ztrehagem/vue-modal";
 
 // Optional. For using default components.
 import "@ztrehagem/vue-modal/dist/vue-modal.css";
@@ -29,16 +29,16 @@ import HelloModal from "@/components/HelloModal.vue";
 
 // Define id and arguments of each modals.
 // In this example, there is `hello` modal with an argument `{ nickname: string }`.
-export interface ModalTypes extends modal.ModalTypes {
+export interface ModalTypes {
   hello: { nickname: string };
 }
 
-export const modalManager = new modal.ModalManager<ModalTypes>();
+export const modalManager = new ModalManager<ModalTypes>();
 
 // Associate your Vue components with ids defined above.
 modalManager.addComponent("hello", HelloModal);
 
-Vue.use(modal.plugin, { manager: modalManager });
+Vue.use(VueModal, { manager: modalManager });
 
 declare module "vue/types/vue" {
   interface Vue {

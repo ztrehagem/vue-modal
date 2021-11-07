@@ -1,16 +1,16 @@
 import Vue from "vue";
-import * as modal from "@/lib/main";
-import FooModal from "@/components/FooModal.vue";
+import VueModal, { ModalManager } from "@/lib/main";
+import HelloModal from "@/components/HelloModal.vue";
 
-export interface ModalTypes extends modal.ModalTypes {
-  foo: { name: string };
+export interface ModalTypes {
+  hello: { name: string };
 }
 
-export const modalManager = new modal.ModalManager<ModalTypes>();
+export const modalManager = new ModalManager<ModalTypes>();
 
-modalManager.addComponent("foo", FooModal);
+modalManager.addComponent("hello", HelloModal);
 
-Vue.use(modal.plugin, { manager: modalManager });
+Vue.use(VueModal, { manager: modalManager });
 
 declare module "vue/types/vue" {
   interface Vue {

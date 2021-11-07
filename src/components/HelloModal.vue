@@ -1,8 +1,8 @@
 <template>
   <Modal @click.native="dismiss">
-    <div class="foo-modal">
-      <div class="foo-modal__content" @click.stop>
-        <p>Hello, {{ state.name }}!</p>
+    <div class="hello-modal">
+      <div class="hello-modal__content" @click.stop>
+        <p>Hello, {{ args.name }}!</p>
         <button type="button" @click.prevent="dismiss">closeModal</button>
       </div>
     </div>
@@ -16,8 +16,8 @@ import { ModalTypes } from "@/plugins/modal";
 
 export default Vue.extend({
   props: {
-    state: {
-      type: Object as PropType<ModalTypes["foo"]>,
+    args: {
+      type: Object as PropType<ModalTypes["hello"]>,
       required: true,
     },
   },
@@ -35,7 +35,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.foo-modal {
+.hello-modal {
   position: absolute;
   inset: auto 0;
   padding: 48px;

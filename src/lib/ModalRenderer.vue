@@ -8,7 +8,7 @@
       <component
         :is="$modal.top.component"
         :key="$modal.top.instanceId"
-        :state="$modal.top.state"
+        :args="$modal.top.args"
       />
     </keep-alive>
   </transition>

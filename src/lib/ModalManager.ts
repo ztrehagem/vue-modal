@@ -2,38 +2,45 @@ import Vue from "vue";
 import { VueConstructor } from "vue/types/vue";
 import { freezeBody, unfreezeBody } from "./freeze";
 
-export type ModalState = Record<string, unknown> | null;
+type ModalState = Record<string, unknown> | null;
 
-export type ModalTypes = Record<string, ModalState>;
+type ModalTypes<Key extends string = string> = Record<Key, ModalState>;
 
-export interface ModalStackItem<Decls extends ModalTypes> {
-  name: keyof Decls;
+type ModalKey<Types extends ModalTypes> = Types extends ModalTypes<infer U>
+  ? U
+  : never;
+
+type ModalInstance<Types extends ModalTypes<Key>, Key extends string> = {
+  name: Key;
   instanceId: string;
   component: VueConstructor;
-  state: Decls[keyof Decls];
+  args: Types[Key];
+};
+
+class ModalManagerState<Types extends ModalTypes<Key>, Key extends string> {
+  stack: ModalInstance<Types, Key>[] = [];
 }
 
-class ModalManagerState<Decls extends ModalTypes> {
-  stack: ModalStackItem<Decls>[] = [];
-}
+export class ModalManager<
+  Types extends ModalTypes<Key>,
+  Key extends string = ModalKey<Types>
+> {
+  #state = Vue.observable(new ModalManagerState<Types, Key>());
+  #components = new Map<Key, VueConstructor>();
 
-export class ModalManager<Decls extends ModalTypes> {
-  #state = Vue.observable(new ModalManagerState<Decls>());
-  #components = new Map<keyof Decls, VueConstructor>();
-
-  get stack(): readonly Readonly<ModalStackItem<Decls>>[] {
+  get stack(): readonly Readonly<ModalInstance<Types, Key>>[] {
     return this.#state.stack;
   }
 
-  get top(): Readonly<ModalStackItem<Decls>> | null {
+  get top(): Readonly<ModalInstance<Types, Key>> | null {
     return this.stack.slice(-1).pop() ?? null;
   }
 
-  addComponent(name: keyof Decls, component: VueConstructor): void {
+  addComponent(name: Key, component: VueConstructor): void {
     this.#components.set(name, component);
   }
 
-  push<K extends keyof Decls>(name: K, state: Decls[K]): void {
+  push<K extends Key>(name: K, args: Types[K]): void {
     const component = this.#components.get(name);
     if (!component) {
       // console.error(`No component for '${this.$modal.top.name}' is provided to $modal`)
@@ -47,7 +54,7 @@ export class ModalManager<Decls extends ModalTypes> {
       name,
       instanceId,
       component: namedComponent,
-      state: Vue.observable(state),
+      args: Vue.observable(args),
     });
 
     if (this.stack.length === 1) {
@@ -55,7 +62,7 @@ export class ModalManager<Decls extends ModalTypes> {
     }
   }
 
-  pop<K extends keyof Decls>(name?: K): keyof Decls | null {
+  pop<K extends Key>(name?: K): Key | null {
     if (name && this.top?.name !== name) return null;
     const popped = this.#state.stack.pop()?.name ?? null;
     if (this.stack.length === 0) {
@@ -64,9 +71,9 @@ export class ModalManager<Decls extends ModalTypes> {
     return popped;
   }
 
-  replace<K extends keyof Decls>(name: K, state: Decls[K]): void {
+  replace<K extends Key>(name: K, args: Types[K]): void {
     this.pop();
-    this.push(name, state);
+    this.push(name, args);
   }
 
   flush(): void {

@@ -28,7 +28,7 @@ export default Vue.extend({
 
   methods: {
     showModal() {
-      this.$modal.push("foo", { name: this.name });
+      this.$modal.push("hello", { name: this.name });
     },
   },
 });
