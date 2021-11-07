@@ -18,9 +18,10 @@
     "fix": "run-s fix:*",
     "fix:vue": "vue-cli-service lint",
     "fix:prettier": "prettier --ignore-path .gitignore --check --write .",
-    "prepare": "husky install && run-s build"
+    "prepare": "run-s build"
   },
   "main": "dist/vue-modal.common.js",
+  "files": ["dist"],
   "dependencies": {},
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
