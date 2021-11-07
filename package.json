@@ -1,6 +1,6 @@
 {
   "name": "@ztrehagem/vue-modal",
-  "version": "0.4.3",
+  "version": "1.0.0-beta.0",
   "description": "Stack-managed styleless modal library for Vue.js.",
   "author": {
     "email": "shigeki.suwa@ztrehagem.dev",
@@ -21,7 +21,9 @@
     "prepare": "run-s build"
   },
   "main": "dist/vue-modal.common.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "dependencies": {},
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
