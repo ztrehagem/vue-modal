@@ -1,10 +1,22 @@
 root: true
-env:
-  node: true
+
 extends:
-  - "plugin:vue/essential"
-  - "eslint:recommended"
-  - "@vue/typescript"
+  - "@vue/eslint-config-typescript"
+  - "plugin:@typescript-eslint/recommended"
+  - "plugin:@typescript-eslint/recommended-requiring-type-checking"
   - "prettier"
+
 parserOptions:
-  parser: "@typescript-eslint/parser"
+  project: tsconfig.json
+  extraFileExtensions:
+    - .vue
+
+overrides:
+  - files: ["*.{js,ts}"]
+  - files: ["src/**/*.{js,ts,vue}"]
+    env:
+      browser: true
+  - files: ["**/*.vue"]
+    extends:
+      - "plugin:vue/recommended"
+      - "plugin:prettier-vue/recommended"
