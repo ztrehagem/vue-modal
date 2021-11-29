@@ -12,6 +12,7 @@
     "build": "run-s build:*",
     "build:lib": "vue-cli-service build --target=lib --name=vue-modal ./src/lib/main.ts",
     "build:dts": "tsc -p tsconfig.build.json",
+    "gh-pages": "vue-cli-service build --dest=gh-pages && touch gh-pages/.nojekyll",
     "lint": "run-s lint:*",
     "lint:eslint": "eslint --ignore-path=.gitignore .",
     "lint:prettier": "prettier --ignore-path=.gitignore --check .",
