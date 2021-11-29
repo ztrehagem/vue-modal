@@ -1,6 +1,6 @@
 <template>
   <transition>
-    <div v-if="$modal.top" class="vue-modal-backdrop"></div>
+    <div v-if="$modal.top" class="vue-modal-backdrop" />
   </transition>
 </template>
 

@@ -16,11 +16,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Modal from "./Modal.vue";
+
 export default Vue.extend({
-  components: {
-    Modal,
-  },
   computed: {
     keepAliveNames(): string[] {
       return this.$modal.stack.map(({ instanceId }) => instanceId);

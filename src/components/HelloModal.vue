@@ -1,29 +1,29 @@
 <template>
-  <Modal @click.native="dismiss">
+  <VueModal @click.native="dismiss">
     <div class="hello-modal">
       <div class="hello-modal__content" @click.stop>
         <p>Hello, {{ args.name }}!</p>
         <button type="button" @click.prevent="dismiss">closeModal</button>
       </div>
     </div>
-  </Modal>
+  </VueModal>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import Modal from "@/lib/Modal.vue";
+import VueModal from "@/lib/VueModal.vue";
 import { ModalTypes } from "@/plugins/modal";
 
 export default Vue.extend({
+  components: {
+    VueModal,
+  },
+
   props: {
     args: {
       type: Object as PropType<ModalTypes["hello"]>,
       required: true,
     },
-  },
-
-  components: {
-    Modal,
   },
 
   methods: {

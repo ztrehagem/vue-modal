@@ -1,23 +1,23 @@
 <template>
   <div id="app">
     <div>
-      <input type="text" v-model="name" placeholder="your name" />
+      <input v-model="name" type="text" placeholder="your name" />
       <button type="button" @click.prevent="showModal">showModal</button>
     </div>
-    <ModalBackdrop />
-    <ModalRenderer />
+    <VueModalBackdrop />
+    <VueModalRenderer />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import ModalBackdrop from "@/lib/ModalBackdrop.vue";
-import ModalRenderer from "@/lib/ModalRenderer.vue";
+import VueModalBackdrop from "@/lib/VueModalBackdrop.vue";
+import VueModalRenderer from "@/lib/VueModalRenderer.vue";
 
 export default Vue.extend({
   components: {
-    ModalBackdrop,
-    ModalRenderer,
+    VueModalBackdrop,
+    VueModalRenderer,
   },
 
   data() {

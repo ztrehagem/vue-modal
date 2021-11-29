@@ -3,6 +3,7 @@ import { ModalManager } from "./ModalManager";
 
 export interface Options {
   managerPropertyName?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   manager: ModalManager<any>;
 }
 

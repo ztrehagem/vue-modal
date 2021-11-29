@@ -1,10 +1,10 @@
 import plugin from "./plugin";
-import Modal from "./Modal.vue";
-import ModalBackdrop from "./ModalBackdrop.vue";
-import ModalRenderer from "./ModalRenderer.vue";
+import VueModal from "./VueModal.vue";
+import VueModalBackdrop from "./VueModalBackdrop.vue";
+import VueModalRenderer from "./VueModalRenderer.vue";
 
 export * from "./ModalManager";
 
-export { plugin, Modal, ModalBackdrop, ModalRenderer };
+export { plugin, VueModal, VueModalBackdrop, VueModalRenderer };
 
 export default plugin;

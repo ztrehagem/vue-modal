@@ -47,7 +47,7 @@ declare module "vue/types/vue" {
 }
 ```
 
-The `Modal` and `ModalBackdrop` components can be replaced your component.
+The `VueModal`, `VueModalBackdrop` and components can be replaced your component.
 In that case, please reference implementation of default components.
 
 WIP
