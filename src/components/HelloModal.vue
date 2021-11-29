@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import VueModal from "@/lib/VueModal.vue";
+import { VueModal } from "@/lib/main";
 import { ModalTypes } from "@/plugins/modal";
 
 export default Vue.extend({

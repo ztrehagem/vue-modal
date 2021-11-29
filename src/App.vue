@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import VueModalBackdrop from "@/lib/VueModalBackdrop.vue";
-import VueModalRenderer from "@/lib/VueModalRenderer.vue";
+import { VueModalBackdrop } from "@/lib/main";
+import { VueModalRenderer } from "@/lib/main";
 
 export default Vue.extend({
   components: {
