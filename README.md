@@ -2,20 +2,20 @@
 
 Stack-managed styleless modal library for Vue.js.
 
-## Installation
+# Installation
 
 ```sh
 npm install @ztrehagem/vue-modal
 ```
 
-## Features
+# Features
 
 The modals are managed as stack structure with functions such as push and pop.
 Only the top of stack is always rendered.
 State of stacked modals are kept for each instances by using `<keep-alive>`.
 In addition, multiple instances of same modal component can be in the stack.
 
-## Usage
+# Usage
 
 ```ts
 import Vue from "vue";
@@ -48,16 +48,20 @@ declare module "vue/types/vue" {
 }
 ```
 
-For details of other parts, please reference these:
+For example of other parts, please reference these:
 
 - [src/components/HelloModal.vue](src/components/HelloModal.vue)
 - [src/App.vue](src/App.vue)
 
-The `VueModal` and `VueModalBackdrop` components can be replaced your components.
+`<VueModalRenderer>` is rendering container of modal components.
+`<VueModal>` is base of modal component, which provides css transition.
+`<VueModalBackdrop>` is backdrop of modals.
+
+`<VueModal>` and `<VueModalBackdrop>` can be replaced your components.
 In that case, please reference implementation of default components.
 
-## API
+# API
 
-### class `ModalManager`
+## class `ModalManager`
 
 - see [src/lib/ModalManager.ts](src/lib/ModalManager.ts)
