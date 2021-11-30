@@ -58,4 +58,6 @@ In that case, please reference implementation of default components.
 
 ## API
 
-WIP
+### class `ModalManager`
+
+- see [src/lib/ModalManager.ts](src/lib/ModalManager.ts)
