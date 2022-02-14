@@ -12,15 +12,9 @@ type DefinedComponent = DefineComponent<any, any, any>;
 
 type AnyKey = string | number | symbol;
 
-export type ModalState = Record<AnyKey, unknown> | null;
+type ModalState = Record<AnyKey, unknown> | null;
 
-export type ModalTypes<Key extends AnyKey = AnyKey> = Record<Key, ModalState>;
-
-export type ModalKey<Types extends ModalTypes> = Types extends ModalTypes<
-  infer U
->
-  ? U
-  : never;
+type ModalTypes<Key extends AnyKey> = Record<Key, ModalState>;
 
 export type ModalInstance<Types extends ModalTypes<Key>, Key extends AnyKey> = {
   name: Key;
@@ -30,8 +24,8 @@ export type ModalInstance<Types extends ModalTypes<Key>, Key extends AnyKey> = {
 };
 
 export class ModalManager<
-  Types extends ModalTypes<Key> = ModalTypes,
-  Key extends AnyKey = ModalKey<Types>
+  Types extends ModalTypes<Key> = ModalTypes<AnyKey>,
+  Key extends AnyKey = keyof Types
 > {
   readonly #stack = shallowReactive<ModalInstance<Types, Key>[]>([]);
   readonly #components = new Map<Key, DefinedComponent>();
@@ -147,11 +141,9 @@ export class ModalManager<
 const injectionKey: InjectionKey<ModalManager> = Symbol();
 
 export function useModal<
-  T extends ModalManager<Types, Keys>,
-  Keys extends AnyKey = AnyKey,
-  Types extends ModalTypes = ModalTypes<Keys>
->(): T {
-  const manager = inject<T>(injectionKey);
+  Types extends ModalTypes<keyof Types>
+>(): ModalManager<Types> {
+  const manager = inject<ModalManager<Types>>(injectionKey);
   if (!manager) {
     throw new ModalManagerInjectionError();
   }

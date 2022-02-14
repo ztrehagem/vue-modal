@@ -47,7 +47,7 @@ app.use(modalManager);
 app.mount(/* ... */);
 
 // Accessing ModalManager instance
-const modal = useModal<ModalManager<ModalTypes>>();
+const modal = useModal<ModalTypes>();
 ```
 
 For example of other parts, please reference these:

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VueModal } from "../lib/main";
-import { ModalTypes, useModal } from "../plugins/modal";
+import { ModalTypes, useModal } from "../modal";
 
 const props = defineProps<{
   args: ModalTypes["hello"];

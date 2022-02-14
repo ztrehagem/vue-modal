@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { VueModalBackdrop, VueModalRenderer } from "./lib/main";
-import { useModal } from "./plugins/modal";
+import { useModal } from "./modal";
 
 const modal = useModal();
 
