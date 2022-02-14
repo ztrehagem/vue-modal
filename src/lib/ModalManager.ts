@@ -1,38 +1,38 @@
-import Vue from "vue";
-import { VueConstructor } from "vue/types/vue";
+import { App, DefineComponent, inject, InjectionKey, shallowReactive } from "vue";
 import { freezeBody, unfreezeBody } from "./freeze";
 
-type ModalState = Record<string, unknown> | null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type DefinedComponent = DefineComponent<any, any, any>
 
-type ModalTypes<Key extends string = string> = Record<Key, ModalState>;
+type AnyKey = string | number | symbol;
 
-type ModalKey<Types extends ModalTypes> = Types extends ModalTypes<infer U>
+export type ModalState = Record<AnyKey, unknown> | null;
+
+export type ModalTypes<Key extends AnyKey = AnyKey> = Record<Key, ModalState>;
+
+export type ModalKey<Types extends ModalTypes> = Types extends ModalTypes<infer U>
   ? U
   : never;
 
-type ModalInstance<Types extends ModalTypes<Key>, Key extends string> = {
+export type ModalInstance<Types extends ModalTypes<Key>, Key extends AnyKey> = {
   name: Key;
   instanceId: string;
-  component: VueConstructor;
+  component: DefinedComponent;
   args: Types[Key];
 };
 
-class ModalManagerState<Types extends ModalTypes<Key>, Key extends string> {
-  stack: ModalInstance<Types, Key>[] = [];
-}
-
 export class ModalManager<
-  Types extends ModalTypes<Key>,
-  Key extends string = ModalKey<Types>
+  Types extends ModalTypes<Key> = ModalTypes,
+  Key extends AnyKey = ModalKey<Types>,
 > {
-  #state = Vue.observable(new ModalManagerState<Types, Key>());
-  #components = new Map<Key, VueConstructor>();
+  readonly #stack = shallowReactive<ModalInstance<Types, Key>[]>([])
+  readonly #components = new Map<Key, DefinedComponent>();
 
   /**
    * The stack of modal instances.
    */
   get stack(): readonly Readonly<ModalInstance<Types, Key>>[] {
-    return this.#state.stack;
+    return this.#stack
   }
 
   /**
@@ -47,7 +47,7 @@ export class ModalManager<
    * @param name Modal name
    * @param component Modal component
    */
-  addComponent(name: Key, component: VueConstructor): void {
+  addComponent(name: Key, component: DefinedComponent): void {
     this.#components.set(name, component);
   }
 
@@ -59,7 +59,7 @@ export class ModalManager<
    */
   push<K extends Key>(
     name: K,
-    args: Types[K]
+    args: Types[K],
   ): ModalInstance<Types, Key> | null {
     const component = this.#components.get(name);
     if (!component) {
@@ -67,17 +67,22 @@ export class ModalManager<
       return null;
     }
 
-    const instanceId = `${name}-${this.stack.length}`;
-    const namedComponent = Vue.extend(component).extend({ name: instanceId });
+    const instanceId = `${name.toString()}-${this.stack.length}`;
+    // FIXME: uncomment
+    // const namedComponent = defineComponent({
+    //   ...component,
+    //   name: instanceId,
+    // });
 
     const instance: ModalInstance<Types, Key> = {
       name,
       instanceId,
-      component: namedComponent,
+      // component: namedComponent,
+      component,
       args,
     };
 
-    this.#state.stack.push(instance);
+    this.#stack.push(instance);
 
     if (this.stack.length === 1) {
       freezeBody();
@@ -93,7 +98,7 @@ export class ModalManager<
    */
   pop<K extends Key>(name?: K): ModalInstance<Types, Key> | null {
     if (name && this.top?.name !== name) return null;
-    const popped = this.#state.stack.pop() ?? null;
+    const popped = this.#stack.pop() ?? null;
     if (this.stack.length === 0) {
       unfreezeBody();
     }
@@ -108,7 +113,7 @@ export class ModalManager<
    */
   replace<K extends Key>(
     name: K,
-    args: Types[K]
+    args: Types[K],
   ): {
     pushed: ModalInstance<Types, Key> | null;
     popped: ModalInstance<Types, Key> | null;
@@ -122,7 +127,36 @@ export class ModalManager<
    * Wipe all modal instances, resulting no modals will be rendered.
    */
   flush(): void {
-    this.#state.stack = [];
+    this.#stack.splice(0, Infinity);
     unfreezeBody();
+  }
+
+  install(app: App): void {
+    app.provide(injectionKey, this);
+  }
+}
+
+const injectionKey: InjectionKey<ModalManager> = Symbol()
+
+export function useModal<T extends ModalManager<Types, Keys>, Keys extends AnyKey = AnyKey, Types extends ModalTypes = ModalTypes<Keys>>(): T {
+  const manager = inject<T>(injectionKey)
+  if (!manager) {
+    throw new ModalManagerInjectionError()
+  }
+  return manager
+}
+
+export class ModalManagerInjectionError extends Error {
+  static get errorName(): string {
+    return "ModalManagerInjectionError"
+  }
+
+  static get errorMessage(): string {
+    return "No ModalManager instance is injected."
+  }
+
+  constructor(message = ModalManagerInjectionError.errorMessage) {
+    super(message)
+    this.name = ModalManagerInjectionError.errorName
   }
 }

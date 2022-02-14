@@ -1,11 +1,15 @@
 # @ztrehagem/vue-modal
 
+![](https://img.shields.io/github/package-json/v/ztrehagem/vue-modal/v2)
+![](https://img.shields.io/github/license/ztrehagem/vue-modal)
+![](https://img.shields.io/badge/vue-%5E3.0.0-brightgreen)
+
 Stack-managed styleless modal library for Vue.js.
 
 # Installation
 
 ```sh
-npm install @ztrehagem/vue-modal
+npm install @ztrehagem/vue-modal@2
 ```
 
 # Features
@@ -18,11 +22,11 @@ In addition, multiple instances of same modal component can be in the stack.
 # Usage
 
 ```ts
-import Vue from "vue";
-import VueModal, { ModalManager } from "@ztrehagem/vue-modal";
+import { createApp } from "vue";
+import { ModalManager, useModal } from "@ztrehagem/vue-modal";
 
 // Optional. For using default modal/backdrop components.
-import "@ztrehagem/vue-modal/dist/vue-modal.css";
+import "@ztrehagem/vue-modal/style.css";
 
 // Import your modal components.
 import HelloModal from "@/components/HelloModal.vue";
@@ -38,15 +42,14 @@ export const modalManager = new ModalManager<ModalTypes>();
 modalManager.addComponent("hello", HelloModal);
 
 // Install plugin
-Vue.use(VueModal, { manager: modalManager });
+const app = createApp(/* ... */);
+app.use(modalManager);
+app.mount(/* ... */);
 
-// Type declarations for TypeScript
-declare module "vue/types/vue" {
-  interface Vue {
-    readonly $modal: typeof modalManager;
-  }
-}
+// Accessing ModalManager instance
+const modal = useModal<ModalManager<ModalTypes>>();
 ```
+
 
 For example of other parts, please reference these:
 

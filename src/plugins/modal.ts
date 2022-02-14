@@ -1,19 +1,16 @@
-import Vue from "vue";
-import VueModal, { ModalManager } from "@/lib/main";
-import HelloModal from "@/components/HelloModal.vue";
+import { ModalManager, useModal as baseUseModal } from "../lib/main";
+import HelloModal from "../components/HelloModal.vue";
 
 export interface ModalTypes {
   hello: { name: string };
 }
 
-export const modalManager = new ModalManager<ModalTypes>();
+export function createModalManager(): ModalManager<ModalTypes> {
+  const manager = new ModalManager<ModalTypes>();
+  manager.addComponent("hello", HelloModal);
+  return manager;
+}
 
-modalManager.addComponent("hello", HelloModal);
-
-Vue.use(VueModal, { manager: modalManager });
-
-declare module "vue/types/vue" {
-  interface Vue {
-    readonly $modal: typeof modalManager;
-  }
+export function useModal(): ModalManager<ModalTypes> {
+  return baseUseModal<ModalManager<ModalTypes>, keyof ModalTypes>();
 }

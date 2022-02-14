@@ -1,15 +1,16 @@
+<script setup lang="ts">
+import { useModal } from "./ModalManager";
+
+const modal = useModal();
+</script>
+
 <template>
   <transition>
-    <div v-if="$modal.top" class="vue-modal-backdrop" />
+    <div v-if="modal.top" class="vue-modal-backdrop" />
   </transition>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-export default Vue.extend({});
-</script>
-
-<style lang="scss">
+<style scoped lang="scss">
 .vue-modal-backdrop {
   position: fixed;
   inset: 0;

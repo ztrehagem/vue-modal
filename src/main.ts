@@ -1,9 +1,7 @@
-import Vue from "vue";
-import "./plugins/modal";
+import { createApp } from "vue";
 import App from "./App.vue";
+import { createModalManager } from "./plugins/modal";
 
-Vue.config.productionTip = false;
-
-new Vue({
-  render: (h) => h(App),
-}).$mount("#app");
+const app = createApp(App);
+app.use(createModalManager())
+app.mount("#app");

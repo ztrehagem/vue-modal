@@ -1,40 +1,30 @@
+<script setup lang="ts">
+import { VueModal } from "../lib/main";
+import { ModalTypes, useModal } from "../plugins/modal";
+
+const props = defineProps<{
+  args: ModalTypes["hello"];
+}>();
+
+const modal = useModal();
+
+function dismiss() {
+  modal.pop();
+}
+</script>
+
 <template>
   <VueModal @click.native="dismiss">
     <div class="hello-modal">
       <div class="hello-modal__content" @click.stop>
-        <p>Hello, {{ args.name }}!</p>
+        <p>Hello, {{ props.args.name }}!</p>
         <button type="button" @click.prevent="dismiss">closeModal</button>
       </div>
     </div>
   </VueModal>
 </template>
 
-<script lang="ts">
-import Vue, { PropType } from "vue";
-import { VueModal } from "@/lib/main";
-import { ModalTypes } from "@/plugins/modal";
-
-export default Vue.extend({
-  components: {
-    VueModal,
-  },
-
-  props: {
-    args: {
-      type: Object as PropType<ModalTypes["hello"]>,
-      required: true,
-    },
-  },
-
-  methods: {
-    dismiss() {
-      this.$modal.pop();
-    },
-  },
-});
-</script>
-
-<style lang="scss">
+<style scoped lang="scss">
 .hello-modal {
   position: absolute;
   inset: auto 0;
