@@ -5,7 +5,7 @@ import { useModal } from "./ModalManager";
 const modal = useModal();
 
 const keepAliveNames = computed(() =>
-  modal.stack.map((instance) => instance.instanceId),
+  modal.stack.map((instance) => instance.instanceId)
 );
 </script>
 

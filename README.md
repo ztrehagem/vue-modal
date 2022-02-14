@@ -50,7 +50,6 @@ app.mount(/* ... */);
 const modal = useModal<ModalManager<ModalTypes>>();
 ```
 
-
 For example of other parts, please reference these:
 
 - [src/components/HelloModal.vue](src/components/HelloModal.vue)
