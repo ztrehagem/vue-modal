@@ -8,15 +8,17 @@
     "url": "https://ztrehagem.dev/"
   },
   "scripts": {
+    "prepack": "npm run build:lib",
     "dev": "vite",
-    "build": "vite build && tsc -p tsconfig.dts.json",
+    "build:lib": "vite build --mode=lib && tsc -p tsconfig.dts.json",
+    "build:site": "vite build",
+    "preview": "vite preview",
     "lint": "run-s lint:*",
     "lint:eslint": "eslint --ignore-path=.gitignore .",
     "lint:prettier": "prettier --ignore-path=.gitignore --check .",
     "fix": "run-s fix:*",
-    "fix:eslint": "eslint --ignore-path=.gitignore --fix .",
-    "fix:prettier": "prettier --ignore-path=.gitignore --check --write .",
-    "prepack": "run-s build"
+    "fix:eslint": "npm run lint:eslint -- --fix",
+    "fix:prettier": "npm run lint:prettier -- --write"
   },
   "main": "dist/vue-modal.cjs.js",
   "module": "dist/vue-modal.es.js",

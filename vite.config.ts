@@ -3,24 +3,30 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  root: path.resolve("src"),
+export default defineConfig(({ command, mode }) => {
+  const lib = command == "build" && mode == "lib";
 
-  publicDir: path.resolve("public"),
+  return {
+    root: path.resolve("src"),
 
-  build: {
-    outDir: path.resolve("dist"),
-    emptyOutDir: true,
+    publicDir: path.resolve("public"),
 
-    lib: {
-      entry: path.resolve("src/lib/main.ts"),
-      formats: ["es", "cjs"],
+    build: {
+      outDir: path.resolve(lib ? "dist" : "site"),
+      emptyOutDir: true,
+
+      lib: lib
+        ? {
+            entry: path.resolve("src/lib/main.ts"),
+            formats: ["es", "cjs"],
+          }
+        : false,
+
+      rollupOptions: {
+        external: lib ? ["vue"] : [],
+      },
     },
 
-    rollupOptions: {
-      external: ["vue"],
-    },
-  },
-
-  plugins: [vue()],
+    plugins: [vue()],
+  };
 });
