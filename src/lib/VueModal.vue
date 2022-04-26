@@ -15,7 +15,7 @@
   transition: 300ms ease;
   transition-property: transform, opacity;
 
-  &.v-enter,
+  &.v-enter-from,
   &.v-leave-to {
     opacity: 0;
     transform: translateY(-30px);
