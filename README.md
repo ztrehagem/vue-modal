@@ -4,7 +4,7 @@
 ![](https://img.shields.io/github/license/ztrehagem/vue-modal)
 ![](https://img.shields.io/badge/vue-%5E3.0.0-brightgreen)
 
-Stack-managed styleless modal library for Vue.js.
+Stacking-managed styleless modal library for Vue.js.
 
 # Installation
 
