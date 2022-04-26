@@ -11,21 +11,24 @@ export default defineConfig(({ command, mode }) => {
 
     publicDir: path.resolve("public"),
 
-    build: {
-      outDir: path.resolve(lib ? "dist" : "site"),
-      emptyOutDir: true,
+    build: lib
+      ? {
+          outDir: path.resolve("dist"),
+          emptyOutDir: true,
 
-      lib: lib
-        ? {
+          lib: {
             entry: path.resolve("src/lib/main.ts"),
             formats: ["es", "cjs"],
-          }
-        : false,
+          },
 
-      rollupOptions: {
-        external: lib ? ["vue"] : [],
-      },
-    },
+          rollupOptions: {
+            external: ["vue"],
+          },
+        }
+      : {
+          outDir: path.resolve("site"),
+          emptyOutDir: true,
+        },
 
     plugins: [vue()],
   };
