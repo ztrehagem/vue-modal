@@ -27,10 +27,10 @@ function showModal() {
         <p>Hello, {{ props.args.name }}!</p>
         <button type="button" @click.prevent="dismiss">closeModal</button>
 
-        <div>
-          <input v-model="name" type="text" placeholder="your name" />
-          <button type="button" @click.prevent="showModal">showModal</button>
-        </div>
+        <p>Push the same modal recursively.</p>
+
+        <input v-model="name" type="text" placeholder="your name" />
+        <button type="button" @click.prevent="showModal">showModal</button>
       </div>
     </div>
   </VueModal>
@@ -49,6 +49,7 @@ function showModal() {
     width: 100%;
     max-width: 1024px;
     background: #fff;
+    padding: 24px;
   }
 }
 </style>
