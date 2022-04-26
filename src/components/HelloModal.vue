@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { VueModal } from "../lib/main";
 import { ModalTypes, useModal } from "../modal";
 
@@ -8,8 +9,14 @@ const props = defineProps<{
 
 const modal = useModal();
 
+const name = ref("");
+
 function dismiss() {
   modal.pop();
+}
+
+function showModal() {
+  modal.push("hello", { name: name.value });
 }
 </script>
 
@@ -19,6 +26,11 @@ function dismiss() {
       <div class="hello-modal__content" @click.stop>
         <p>Hello, {{ props.args.name }}!</p>
         <button type="button" @click.prevent="dismiss">closeModal</button>
+
+        <div>
+          <input v-model="name" type="text" placeholder="your name" />
+          <button type="button" @click.prevent="showModal">showModal</button>
+        </div>
       </div>
     </div>
   </VueModal>
