@@ -1,0 +1,29 @@
+.vue-modal {
+  overflow: auto;
+  position: fixed;
+  inset: 0;
+  height: 100%;
+  opacity: 1;
+  transform: translateY(0);
+  transition: 300ms ease;
+  transition-property: transform, opacity;
+}
+
+.vue-modal.v-enter-from,
+.vue-modal.v-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.vue-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+  transition: 300ms ease opacity;
+}
+
+.vue-modal-backdrop.v-enter,
+.vue-modal-backdrop.v-leave-to {
+  opacity: 0;
+}

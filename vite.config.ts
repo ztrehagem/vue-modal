@@ -1,6 +1,8 @@
 import * as path from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import vueJsx from "@vitejs/plugin-vue-jsx";
+import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -30,6 +32,6 @@ export default defineConfig(({ command, mode }) => {
           emptyOutDir: true,
         },
 
-    plugins: [vue()],
+    plugins: [vue(), vueJsx(), vanillaExtractPlugin()],
   };
 });

@@ -1,7 +1,7 @@
-export function freezeBody(): void {
+export const freezeBody = (): void => {
   window.document.body.style.overflow = "hidden";
-}
+};
 
-export function unfreezeBody(): void {
+export const unfreezeBody = (): void => {
   window.document.body.style.overflow = "";
-}
+};

@@ -1,10 +1,9 @@
 import { createApp } from "vue";
-import App from "./App.vue";
-import HelloModal from "./components/HelloModal.vue";
-import { ModalManager } from "./lib/main";
-import { ModalTypes } from "./modal";
+import App from "./App";
+import HelloModal from "./components/HelloModal";
+import { createModalManager } from "./plugins/modal";
 
-const modalManager = new ModalManager<ModalTypes>();
+const modalManager = createModalManager();
 modalManager.addComponent("hello", HelloModal);
 
 const app = createApp(App);

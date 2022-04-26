@@ -1,6 +1,7 @@
-import VueModal from "./VueModal.vue";
-import VueModalBackdrop from "./VueModalBackdrop.vue";
-import VueModalRenderer from "./VueModalRenderer.vue";
+import VueModal from "./VueModal";
+import VueModalBackdrop from "./VueModalBackdrop";
+import VueModalRenderer from "./VueModalRenderer";
+import "./style.css";
 
 export {
   ModalManager,

@@ -140,15 +140,15 @@ export class ModalManager<
 
 const injectionKey: InjectionKey<ModalManager> = Symbol();
 
-export function useModal<
+export const useModal = <
   Types extends ModalTypes<keyof Types>
->(): ModalManager<Types> {
+>(): ModalManager<Types> => {
   const manager = inject<ModalManager<Types>>(injectionKey);
   if (!manager) {
     throw new ModalManagerInjectionError();
   }
   return manager;
-}
+};
 
 export class ModalManagerInjectionError extends Error {
   static get errorName(): string {
