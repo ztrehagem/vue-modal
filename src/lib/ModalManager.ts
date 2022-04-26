@@ -1,6 +1,8 @@
 import {
   App,
+  defineComponent,
   DefineComponent,
+  h,
   inject,
   InjectionKey,
   shallowReactive,
@@ -70,17 +72,18 @@ export class ModalManager<
     }
 
     const instanceId = `${name.toString()}-${this.stack.length}`;
-    // FIXME: uncomment
-    // const namedComponent = defineComponent({
-    //   ...component,
-    //   name: instanceId,
-    // });
+
+    const namedComponent = defineComponent({
+      name: instanceId,
+      setup(props, { attrs }) {
+        return () => h(component, attrs);
+      },
+    });
 
     const instance: ModalInstance<Types, Key> = {
       name,
       instanceId,
-      // component: namedComponent,
-      component,
+      component: namedComponent,
       args,
     };
 

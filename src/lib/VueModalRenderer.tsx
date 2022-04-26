@@ -12,7 +12,7 @@ export default defineComponent({
     return () => (
       <Transition mode="out-in">
         {modal.top && (
-          <KeepAlive key={modal.top.instanceId} include={keepAliveNames.value}>
+          <KeepAlive include={keepAliveNames.value}>
             <modal.top.component
               key={modal.top.instanceId}
               args={modal.top.args}

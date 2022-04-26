@@ -9,3 +9,6 @@ modalManager.addComponent("hello", HelloModal);
 const app = createApp(App);
 app.use(modalManager);
 app.mount("#app");
+
+Object.defineProperty(window, "app", { value: app });
+Object.defineProperty(window, "modal", { value: modalManager });
