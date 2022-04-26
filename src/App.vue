@@ -14,6 +14,8 @@ function showModal() {
 
 <template>
   <div id="app">
+    <h1>@ztrehagem/vue-modal@3</h1>
+
     <div>
       <input v-model="name" type="text" placeholder="your name" />
       <button type="button" @click.prevent="showModal">showModal</button>
