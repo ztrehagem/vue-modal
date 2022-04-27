@@ -1,6 +1,7 @@
 import { ref, defineComponent } from "vue";
 import { VueModalBackdrop, VueModalRenderer } from "./lib/main";
 import { useModal } from "./plugins/modal";
+import pkg from "../package.json";
 
 export default defineComponent({
   setup() {
@@ -15,7 +16,9 @@ export default defineComponent({
 
     return () => (
       <div id="app">
-        <h1>@ztrehagem/vue-modal@3</h1>
+        <h1>
+          {pkg.name}@{pkg.version}
+        </h1>
 
         <div>
           <input v-model={name.value} type="text" placeholder="your name" />
