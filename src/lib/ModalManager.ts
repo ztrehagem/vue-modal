@@ -80,6 +80,7 @@ export class ModalManager<
       },
     });
 
+    // TODO: Capture current focused element to restore focusing when closing the modal.
     const instance: ModalInstance<Types, Key> = {
       name,
       instanceId,

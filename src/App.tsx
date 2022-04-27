@@ -1,32 +1,15 @@
-import { ref, defineComponent } from "vue";
-import { VueModalBackdrop, VueModalRenderer } from "./lib/main";
-import { useModal } from "./plugins/modal";
+import { defineComponent } from "vue";
+import ModalDemo from "./components/ModalDemo";
+import PackageInformation from "./components/PackageInformation";
 
 export default defineComponent({
   setup() {
-    const modal = useModal();
-
-    const name = ref("");
-
-    const showModal = (e: Event): void => {
-      e.preventDefault();
-      modal.push("hello", { name: name.value });
-    };
-
     return () => (
-      <div id="app">
-        <h1>@ztrehagem/vue-modal@3</h1>
+      <main>
+        <PackageInformation />
 
-        <div>
-          <input v-model={name.value} type="text" placeholder="your name" />
-          <button type="button" onClick={showModal}>
-            showModal
-          </button>
-        </div>
-
-        <VueModalBackdrop />
-        <VueModalRenderer />
-      </div>
+        <ModalDemo />
+      </main>
     );
   },
 });

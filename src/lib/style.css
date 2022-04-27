@@ -23,7 +23,7 @@
   transition: 300ms ease opacity;
 }
 
-.vue-modal-backdrop.v-enter,
+.vue-modal-backdrop.v-enter-from,
 .vue-modal-backdrop.v-leave-to {
   opacity: 0;
 }

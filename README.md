@@ -1,8 +1,9 @@
 # @ztrehagem/vue-modal
 
-![](https://img.shields.io/github/package-json/v/ztrehagem/vue-modal/v2)
+![](https://img.shields.io/npm/v/@ztrehagem/vue-modal/latest)
+![](https://img.shields.io/npm/dependency-version/@ztrehagem/vue-modal/peer/vue)
+![](https://img.shields.io/npm/types/@ztrehagem/vue-modal)
 ![](https://img.shields.io/github/license/ztrehagem/vue-modal)
-![](https://img.shields.io/badge/vue-%5E3.0.0-brightgreen)
 
 Stacking-managed styleless modal library for Vue.js.
 
@@ -29,7 +30,7 @@ import { ModalManager, useModal } from "@ztrehagem/vue-modal";
 import "@ztrehagem/vue-modal/style.css";
 
 // Import your modal components.
-import HelloModal from "@/components/HelloModal.vue";
+import HelloModal from "@/components/HelloModal";
 
 // Define id and arguments of each modals.
 // In this example, there is `hello` modal which has an argument `{ nickname: string }`.
@@ -52,8 +53,8 @@ const modal = useModal<ModalTypes>();
 
 For example of other parts, please reference these:
 
-- [src/components/HelloModal.vue](src/components/HelloModal.vue)
-- [src/App.vue](src/App.vue)
+- [src/components/HelloModal.tsx](src/components/HelloModal.tsx)
+- [src/App.tsx](src/App.tsx)
 
 `<VueModalRenderer>` is rendering container of modal components.
 `<VueModal>` is base of modal component, which provides css transition.

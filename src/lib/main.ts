@@ -1,12 +1,10 @@
-import VueModal from "./VueModal";
-import VueModalBackdrop from "./VueModalBackdrop";
-import VueModalRenderer from "./VueModalRenderer";
 import "./style.css";
 
+export { default as VueModal } from "./VueModal";
+export { default as VueModalBackdrop } from "./VueModalBackdrop";
+export { default as VueModalRenderer } from "./VueModalRenderer";
 export {
   ModalManager,
   ModalManagerInjectionError,
   useModal,
 } from "./ModalManager";
-
-export { VueModal, VueModalBackdrop, VueModalRenderer };

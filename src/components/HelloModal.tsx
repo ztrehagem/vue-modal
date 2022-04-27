@@ -1,7 +1,8 @@
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType } from "vue";
 import { VueModal } from "../lib/main";
 import { ModalTypes, useModal } from "../plugins/modal";
 import { content, root } from "./HelloModal.css";
+import NameForm from "./NameForm";
 
 export default defineComponent({
   props: {
@@ -14,16 +15,13 @@ export default defineComponent({
   setup(props) {
     const modal = useModal();
 
-    const name = ref("");
-
     const dismiss = (e: Event): void => {
       e.preventDefault();
       modal.pop();
     };
 
-    const showModal = (e: Event): void => {
-      e.preventDefault();
-      modal.push("hello", { name: name.value });
+    const showModal = (name: string): void => {
+      modal.push("hello", { name });
     };
 
     const stopPropagation = (e: Event): void => {
@@ -32,19 +30,17 @@ export default defineComponent({
 
     return () => (
       <VueModal>
-        <div class={root} onClick={dismiss}>
-          <div class={content} onClick={stopPropagation}>
+        <div class={root} onClick={stopPropagation}>
+          <div class={content}>
             <p>Hello, {props.args.name}!</p>
+
             <button type="button" onClick={dismiss}>
               closeModal
             </button>
 
             <p>Push the same modal recursively.</p>
 
-            <input v-model={name.value} type="text" placeholder="your name" />
-            <button type="button" onClick={showModal}>
-              showModal
-            </button>
+            <NameForm onSubmit={showModal} />
           </div>
         </div>
       </VueModal>
