@@ -32,8 +32,8 @@ export default defineComponent({
 
     return () => (
       <VueModal>
-        <div class={root} onClick={dismiss}>
-          <div class={content} onClick={stopPropagation}>
+        <div class={root} onClick={stopPropagation}>
+          <div class={content}>
             <p>Hello, {props.args.name}!</p>
             <button type="button" onClick={dismiss}>
               closeModal

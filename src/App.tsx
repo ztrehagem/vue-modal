@@ -14,6 +14,10 @@ export default defineComponent({
       modal.push("hello", { name: name.value });
     };
 
+    const dismissModal = (e: Event): void => {
+      modal.pop();
+    };
+
     return () => (
       <div id="app">
         <h1>
@@ -27,8 +31,10 @@ export default defineComponent({
           </button>
         </div>
 
-        <VueModalBackdrop />
-        <VueModalRenderer />
+        <div onClick={dismissModal}>
+          <VueModalBackdrop />
+          <VueModalRenderer />
+        </div>
       </div>
     );
   },
