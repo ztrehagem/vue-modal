@@ -1,17 +1,15 @@
 import { defineComponent } from "vue";
-import pkg from "../package.json";
 import ModalDemo from "./components/ModalDemo";
+import PackageInformation from "./components/PackageInformation";
 
 export default defineComponent({
   setup() {
     return () => (
-      <div>
-        <h1>
-          {pkg.name}@{pkg.version}
-        </h1>
+      <main>
+        <PackageInformation />
 
         <ModalDemo />
-      </div>
+      </main>
     );
   },
 });

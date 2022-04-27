@@ -1,8 +1,9 @@
 # @ztrehagem/vue-modal
 
-![](https://img.shields.io/github/package-json/v/ztrehagem/vue-modal/v2)
+![](https://img.shields.io/npm/v/@ztrehagem/vue-modal/latest)
+![](https://img.shields.io/npm/dependency-version/@ztrehagem/vue-modal/peer/vue)
+![](https://img.shields.io/npm/types/@ztrehagem/vue-modal)
 ![](https://img.shields.io/github/license/ztrehagem/vue-modal)
-![](https://img.shields.io/badge/vue-%5E3.0.0-brightgreen)
 
 Stacking-managed styleless modal library for Vue.js.
 

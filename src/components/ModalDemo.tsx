@@ -1,16 +1,14 @@
-import { ref, defineComponent, Teleport } from "vue";
+import { defineComponent, Teleport } from "vue";
 import { VueModalBackdrop, VueModalRenderer } from "../lib/main";
 import { useModal } from "../plugins/modal";
+import NameForm from "./NameForm";
 
 export default defineComponent({
   setup() {
     const modal = useModal();
 
-    const name = ref("");
-
-    const showModal = (e: Event): void => {
-      e.preventDefault();
-      modal.push("hello", { name: name.value });
+    const showModal = (name: string): void => {
+      modal.push("hello", { name });
     };
 
     const dismissModal = (e: Event): void => {
@@ -18,11 +16,10 @@ export default defineComponent({
     };
 
     return () => (
-      <div>
-        <input v-model={name.value} type="text" placeholder="your name" />
-        <button type="button" onClick={showModal}>
-          showModal
-        </button>
+      <section>
+        <h2>Demo</h2>
+
+        <NameForm onSubmit={showModal} />
 
         <Teleport to="body">
           <div onClick={dismissModal}>
@@ -30,7 +27,7 @@ export default defineComponent({
             <VueModalRenderer />
           </div>
         </Teleport>
-      </div>
+      </section>
     );
   },
 });
