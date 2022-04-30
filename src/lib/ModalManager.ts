@@ -73,7 +73,7 @@ export class ModalManager<
       return null;
     }
 
-    const instanceId = `${name.toString()}-${this.#id.next().value}`;
+    const instanceId = `VueModal[${this.#id.next().value}]::${name.toString()}`;
 
     const namedComponent = defineComponent({
       name: instanceId,
