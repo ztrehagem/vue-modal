@@ -85,15 +85,19 @@ export class ModalManager<
 
   /**
    * Remove the modal currently rendered. If it is remained some modal instances in the stack, the next one is rendered.
-   * @param key If specified, pop is executed only when it is equal to key of the top of stack.
    * @returns Popped modal instance
    */
-  pop<K extends Key>(key?: K): ModalInstance<Types, Key> | null {
-    if (key && this.top?.key !== key) return null;
-    const popped = this.#stack.pop() ?? null;
+  pop(): ModalInstance<Types, Key> | null {
+    const popped = this.#stack.pop();
+
+    if (!popped) {
+      return null;
+    }
+
     if (this.stack.length === 0) {
       unfreezeBody();
     }
+
     return popped;
   }
 
