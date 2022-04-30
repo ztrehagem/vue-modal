@@ -98,24 +98,6 @@ export class ModalManager<
   }
 
   /**
-   * Pop then push. Arguments are same as `push()`.
-   * @param key
-   * @param args
-   * @returns Popped and pushed modal instances
-   */
-  replace<K extends Key>(
-    key: K,
-    args: Types[K]
-  ): {
-    pushed: ModalInstance<Types, Key>;
-    popped: ModalInstance<Types, Key> | null;
-  } {
-    const popped = this.pop();
-    const pushed = this.push(key, args);
-    return { pushed, popped };
-  }
-
-  /**
    * Wipe all modal instances, resulting no modals will be rendered.
    */
   flush(): void {
