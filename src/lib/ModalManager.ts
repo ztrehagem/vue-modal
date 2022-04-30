@@ -1,7 +1,6 @@
 import {
   App,
   defineComponent,
-  DefineComponent,
   h,
   inject,
   InjectionKey,
@@ -9,31 +8,16 @@ import {
 } from "vue";
 import { ModalManagerInjectionError } from "./errors";
 import { freezeBody, unfreezeBody } from "./freeze";
+import { ModalComponent, ModalInstance, ModalKey, ModalTypes } from "./types";
 import { incrementor } from "./utils";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DefinedComponent = DefineComponent<any, any, any>;
-
-type AnyKey = string | number | symbol;
-
-type ModalState = Record<AnyKey, unknown> | null;
-
-type ModalTypes<Key extends AnyKey> = Record<Key, ModalState>;
-
-export type ModalInstance<Types extends ModalTypes<Key>, Key extends AnyKey> = {
-  name: Key;
-  instanceId: string;
-  component: DefinedComponent;
-  args: Types[Key];
-};
-
 export class ModalManager<
-  Types extends ModalTypes<Key> = ModalTypes<AnyKey>,
-  Key extends AnyKey = keyof Types
+  Types extends ModalTypes<Key> = ModalTypes<ModalKey>,
+  Key extends ModalKey = keyof Types
 > {
   readonly #id = incrementor();
   readonly #stack = shallowReactive<ModalInstance<Types, Key>[]>([]);
-  readonly #components = new Map<Key, DefinedComponent>();
+  readonly #components = new Map<Key, ModalComponent>();
 
   /**
    * The stack of modal instances.
@@ -54,7 +38,7 @@ export class ModalManager<
    * @param name Modal name
    * @param component Modal component
    */
-  addComponent(name: Key, component: DefinedComponent): void {
+  addComponent(name: Key, component: ModalComponent): void {
     this.#components.set(name, component);
   }
 
