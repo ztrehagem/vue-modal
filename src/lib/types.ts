@@ -13,7 +13,7 @@ export type ModalInstance<
   Types extends ModalTypes<Key>,
   Key extends ModalKey
 > = {
-  name: Key;
+  key: Key;
   instanceId: string;
   component: ModalComponent;
   args: Types[Key];

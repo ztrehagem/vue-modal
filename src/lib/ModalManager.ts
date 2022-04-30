@@ -34,31 +34,31 @@ export class ModalManager<
   }
 
   /**
-   * Register a modal component and associate it with name to call it.
-   * @param name Modal name
+   * Register a modal component and associate it with key to call it.
+   * @param key Modal key
    * @param component Modal component
    */
-  addComponent(name: Key, component: ModalComponent): void {
-    this.#components.set(name, component);
+  addComponent(key: Key, component: ModalComponent): void {
+    this.#components.set(key, component);
   }
 
   /**
    * Create new modal instance and push it into the stack. If there are some instances in the stack, new modal will be instead of currently displayed.
-   * @param name Modal name
+   * @param key Modal key
    * @param args A value passed to the modal component as `args` prop
    * @returns Pushed modal instance
    */
   push<K extends Key>(
-    name: K,
+    key: K,
     args: Types[K]
   ): ModalInstance<Types, Key> | null {
-    const component = this.#components.get(name);
+    const component = this.#components.get(key);
     if (!component) {
-      // console.error(`No component for '${this.$modal.top.name}' is provided to $modal`)
+      // console.error(`No component for '${this.$modal.top.key}' is provided to $modal`)
       return null;
     }
 
-    const instanceId = `VueModal[${this.#id.next().value}]::${name.toString()}`;
+    const instanceId = `VueModal[${this.#id.next().value}]::${key.toString()}`;
 
     const namedComponent = defineComponent({
       name: instanceId,
@@ -69,7 +69,7 @@ export class ModalManager<
 
     // TODO: Capture current focused element to restore focusing when closing the modal.
     const instance: ModalInstance<Types, Key> = {
-      name,
+      key,
       instanceId,
       component: namedComponent,
       args,
@@ -86,11 +86,11 @@ export class ModalManager<
 
   /**
    * Remove the modal currently rendered. If it is remained some modal instances in the stack, the next one is rendered.
-   * @param name If specified, pop is executed only when it is equal to name of the top of stack.
+   * @param key If specified, pop is executed only when it is equal to key of the top of stack.
    * @returns Popped modal instance
    */
-  pop<K extends Key>(name?: K): ModalInstance<Types, Key> | null {
-    if (name && this.top?.name !== name) return null;
+  pop<K extends Key>(key?: K): ModalInstance<Types, Key> | null {
+    if (key && this.top?.key !== key) return null;
     const popped = this.#stack.pop() ?? null;
     if (this.stack.length === 0) {
       unfreezeBody();
@@ -100,19 +100,19 @@ export class ModalManager<
 
   /**
    * Pop then push. Arguments are same as `push()`.
-   * @param name
+   * @param key
    * @param args
    * @returns Popped and pushed modal instances
    */
   replace<K extends Key>(
-    name: K,
+    key: K,
     args: Types[K]
   ): {
     pushed: ModalInstance<Types, Key> | null;
     popped: ModalInstance<Types, Key> | null;
   } {
     const popped = this.pop();
-    const pushed = this.push(name, args);
+    const pushed = this.push(key, args);
     return { pushed, popped };
   }
 
