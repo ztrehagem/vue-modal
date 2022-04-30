@@ -45,15 +45,12 @@ export class ModalManager<
     this.#components.set(key, component);
   }
 
-  /**
-   * Create new modal instance and push it into the stack. If there are some instances in the stack, new modal will be instead of currently displayed.
-   * @param key Modal key
-   * @param args A value passed to the modal component as `args` prop
-   * @returns Pushed modal instance
-   * @throws {ModalComponentNotProvidedError} The modal component specified with `key` was not provided.
-   */
-  push<K extends Key>(key: K, args: Types[K]): ModalInstance<Types, Key> {
+  private createModalInstance<K extends Key>(
+    key: K,
+    args: Types[K]
+  ): ModalInstance<Types, Key> {
     const component = this.#components.get(key);
+
     if (!component) {
       throw new ModalComponentNotProvidedError(key);
     }
@@ -74,6 +71,19 @@ export class ModalManager<
       component: namedComponent,
       args,
     };
+
+    return instance;
+  }
+
+  /**
+   * Create new modal instance and push it into the stack. If there are some instances in the stack, new modal will be instead of currently displayed.
+   * @param key Modal key
+   * @param args A value passed to the modal component as `args` prop
+   * @returns Pushed modal instance
+   * @throws {ModalComponentNotProvidedError} The modal component specified with `key` was not provided.
+   */
+  push<K extends Key>(key: K, args: Types[K]): ModalInstance<Types, Key> {
+    const instance = this.createModalInstance(key, args);
 
     this.#stack.push(instance);
 
