@@ -1,36 +1,26 @@
 import {
   App,
   defineComponent,
-  DefineComponent,
   h,
   inject,
   InjectionKey,
   shallowReactive,
 } from "vue";
+import {
+  ModalComponentNotProvidedError,
+  ModalManagerInjectionError,
+} from "./errors";
 import { freezeBody, unfreezeBody } from "./freeze";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DefinedComponent = DefineComponent<any, any, any>;
-
-type AnyKey = string | number | symbol;
-
-type ModalState = Record<AnyKey, unknown> | null;
-
-type ModalTypes<Key extends AnyKey> = Record<Key, ModalState>;
-
-export type ModalInstance<Types extends ModalTypes<Key>, Key extends AnyKey> = {
-  name: Key;
-  instanceId: string;
-  component: DefinedComponent;
-  args: Types[Key];
-};
+import { ModalComponent, ModalInstance, ModalKey, ModalTypes } from "./types";
+import { incrementor } from "./utils";
 
 export class ModalManager<
-  Types extends ModalTypes<Key> = ModalTypes<AnyKey>,
-  Key extends AnyKey = keyof Types
+  Types extends ModalTypes<Key> = ModalTypes<ModalKey>,
+  Key extends ModalKey = keyof Types
 > {
+  readonly #id = incrementor();
   readonly #stack = shallowReactive<ModalInstance<Types, Key>[]>([]);
-  readonly #components = new Map<Key, DefinedComponent>();
+  readonly #components = new Map<Key, ModalComponent>();
 
   /**
    * The stack of modal instances.
@@ -47,31 +37,25 @@ export class ModalManager<
   }
 
   /**
-   * Register a modal component and associate it with name to call it.
-   * @param name Modal name
+   * Register a modal component and associate it with key to call it.
+   * @param key Modal key
    * @param component Modal component
    */
-  addComponent(name: Key, component: DefinedComponent): void {
-    this.#components.set(name, component);
+  addComponent(key: Key, component: ModalComponent): void {
+    this.#components.set(key, component);
   }
 
-  /**
-   * Create new modal instance and push it into the stack. If there are some instances in the stack, new modal will be instead of currently displayed.
-   * @param name Modal name
-   * @param args A value passed to the modal component as `args` prop
-   * @returns Pushed modal instance
-   */
-  push<K extends Key>(
-    name: K,
+  private createModalInstance<K extends Key>(
+    key: K,
     args: Types[K]
-  ): ModalInstance<Types, Key> | null {
-    const component = this.#components.get(name);
+  ): ModalInstance<Types, Key> {
+    const component = this.#components.get(key);
+
     if (!component) {
-      // console.error(`No component for '${this.$modal.top.name}' is provided to $modal`)
-      return null;
+      throw new ModalComponentNotProvidedError(key);
     }
 
-    const instanceId = `${name.toString()}-${this.stack.length}`;
+    const instanceId = `VueModal[${this.#id.next().value}]::${key.toString()}`;
 
     const namedComponent = defineComponent({
       name: instanceId,
@@ -82,11 +66,24 @@ export class ModalManager<
 
     // TODO: Capture current focused element to restore focusing when closing the modal.
     const instance: ModalInstance<Types, Key> = {
-      name,
+      key,
       instanceId,
       component: namedComponent,
       args,
     };
+
+    return instance;
+  }
+
+  /**
+   * Create new modal instance and push it into the stack. If there are some instances in the stack, new modal will be instead of currently displayed.
+   * @param key Modal key
+   * @param args A value passed to the modal component as `args` prop
+   * @returns Pushed modal instance
+   * @throws {ModalComponentNotProvidedError} The modal component specified with `key` was not provided.
+   */
+  push<K extends Key>(key: K, args: Types[K]): ModalInstance<Types, Key> {
+    const instance = this.createModalInstance(key, args);
 
     this.#stack.push(instance);
 
@@ -99,34 +96,20 @@ export class ModalManager<
 
   /**
    * Remove the modal currently rendered. If it is remained some modal instances in the stack, the next one is rendered.
-   * @param name If specified, pop is executed only when it is equal to name of the top of stack.
    * @returns Popped modal instance
    */
-  pop<K extends Key>(name?: K): ModalInstance<Types, Key> | null {
-    if (name && this.top?.name !== name) return null;
-    const popped = this.#stack.pop() ?? null;
+  pop(): ModalInstance<Types, Key> | null {
+    const popped = this.#stack.pop();
+
+    if (!popped) {
+      return null;
+    }
+
     if (this.stack.length === 0) {
       unfreezeBody();
     }
-    return popped;
-  }
 
-  /**
-   * Pop then push. Arguments are same as `push()`.
-   * @param name
-   * @param args
-   * @returns Popped and pushed modal instances
-   */
-  replace<K extends Key>(
-    name: K,
-    args: Types[K]
-  ): {
-    pushed: ModalInstance<Types, Key> | null;
-    popped: ModalInstance<Types, Key> | null;
-  } {
-    const popped = this.pop();
-    const pushed = this.push(name, args);
-    return { pushed, popped };
+    return popped;
   }
 
   /**
@@ -144,6 +127,11 @@ export class ModalManager<
 
 const injectionKey: InjectionKey<ModalManager> = Symbol();
 
+/**
+ * Get ModalManager instance provided in current context.
+ * @returns ModalManager instance
+ * @throws {ModalManagerInjectionError} Injection failure
+ */
 export const useModal = <
   Types extends ModalTypes<keyof Types>
 >(): ModalManager<Types> => {
@@ -153,18 +141,3 @@ export const useModal = <
   }
   return manager;
 };
-
-export class ModalManagerInjectionError extends Error {
-  static get errorName(): string {
-    return "ModalManagerInjectionError";
-  }
-
-  static get errorMessage(): string {
-    return "No ModalManager instance is injected.";
-  }
-
-  constructor(message = ModalManagerInjectionError.errorMessage) {
-    super(message);
-    this.name = ModalManagerInjectionError.errorName;
-  }
-}
