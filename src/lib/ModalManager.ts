@@ -7,6 +7,7 @@ import {
   InjectionKey,
   shallowReactive,
 } from "vue";
+import { ModalManagerInjectionError } from "./errors";
 import { freezeBody, unfreezeBody } from "./freeze";
 import { incrementor } from "./utils";
 
@@ -155,18 +156,3 @@ export const useModal = <
   }
   return manager;
 };
-
-export class ModalManagerInjectionError extends Error {
-  static get errorName(): string {
-    return "ModalManagerInjectionError";
-  }
-
-  static get errorMessage(): string {
-    return "No ModalManager instance is injected.";
-  }
-
-  constructor(message = ModalManagerInjectionError.errorMessage) {
-    super(message);
-    this.name = ModalManagerInjectionError.errorName;
-  }
-}
