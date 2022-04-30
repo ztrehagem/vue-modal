@@ -50,6 +50,7 @@ export class ModalManager<
    * @param key Modal key
    * @param args A value passed to the modal component as `args` prop
    * @returns Pushed modal instance
+   * @throws {ModalComponentNotProvidedError} The modal component specified with `key` was not provided.
    */
   push<K extends Key>(key: K, args: Types[K]): ModalInstance<Types, Key> {
     const component = this.#components.get(key);
@@ -116,6 +117,11 @@ export class ModalManager<
 
 const injectionKey: InjectionKey<ModalManager> = Symbol();
 
+/**
+ * Get ModalManager instance provided in current context.
+ * @returns ModalManager instance
+ * @throws {ModalManagerInjectionError} Injection failure
+ */
 export const useModal = <
   Types extends ModalTypes<keyof Types>
 >(): ModalManager<Types> => {
