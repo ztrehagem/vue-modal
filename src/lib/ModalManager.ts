@@ -6,7 +6,10 @@ import {
   InjectionKey,
   shallowReactive,
 } from "vue";
-import { ModalManagerInjectionError } from "./errors";
+import {
+  ModalComponentNotProvidedError,
+  ModalManagerInjectionError,
+} from "./errors";
 import { freezeBody, unfreezeBody } from "./freeze";
 import { ModalComponent, ModalInstance, ModalKey, ModalTypes } from "./types";
 import { incrementor } from "./utils";
@@ -48,14 +51,10 @@ export class ModalManager<
    * @param args A value passed to the modal component as `args` prop
    * @returns Pushed modal instance
    */
-  push<K extends Key>(
-    key: K,
-    args: Types[K]
-  ): ModalInstance<Types, Key> | null {
+  push<K extends Key>(key: K, args: Types[K]): ModalInstance<Types, Key> {
     const component = this.#components.get(key);
     if (!component) {
-      // console.error(`No component for '${this.$modal.top.key}' is provided to $modal`)
-      return null;
+      throw new ModalComponentNotProvidedError(key);
     }
 
     const instanceId = `VueModal[${this.#id.next().value}]::${key.toString()}`;
@@ -108,7 +107,7 @@ export class ModalManager<
     key: K,
     args: Types[K]
   ): {
-    pushed: ModalInstance<Types, Key> | null;
+    pushed: ModalInstance<Types, Key>;
     popped: ModalInstance<Types, Key> | null;
   } {
     const popped = this.pop();
