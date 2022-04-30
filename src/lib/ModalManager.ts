@@ -8,6 +8,7 @@ import {
   shallowReactive,
 } from "vue";
 import { freezeBody, unfreezeBody } from "./freeze";
+import { incrementor } from "./utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type DefinedComponent = DefineComponent<any, any, any>;
@@ -29,6 +30,7 @@ export class ModalManager<
   Types extends ModalTypes<Key> = ModalTypes<AnyKey>,
   Key extends AnyKey = keyof Types
 > {
+  readonly #id = incrementor();
   readonly #stack = shallowReactive<ModalInstance<Types, Key>[]>([]);
   readonly #components = new Map<Key, DefinedComponent>();
 
@@ -71,7 +73,7 @@ export class ModalManager<
       return null;
     }
 
-    const instanceId = `${name.toString()}-${this.stack.length}`;
+    const instanceId = `${name.toString()}-${this.#id.next().value}`;
 
     const namedComponent = defineComponent({
       name: instanceId,
