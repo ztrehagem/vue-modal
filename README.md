@@ -22,46 +22,117 @@ In addition, multiple instances of same modal component can be in the stack.
 
 # Usage
 
-```ts
-import { createApp } from "vue";
-import { ModalManager, useModal } from "@ztrehagem/vue-modal";
+1. Declare all modal names and theirs argument schema.
+   In this example, there is a modal named `hello` with an argument `{ nickname: string }`.
 
-// Optional. For using default modal/backdrop components.
-import "@ztrehagem/vue-modal/style.css";
-
-// Import your modal components.
-import HelloModal from "@/components/HelloModal";
-
-// Define id and arguments of each modals.
-// In this example, there is `hello` modal which has an argument `{ nickname: string }`.
+```tsx
 export interface ModalTypes {
   hello: { nickname: string };
 }
-
-// Create a ModalManager instance and associate your Vue components with ids defined above.
-export const modalManager = new ModalManager<ModalTypes>();
-modalManager.addComponent("hello", HelloModal);
-
-// Install plugin
-const app = createApp(/* ... */);
-app.use(modalManager);
-app.mount(/* ... */);
-
-// Accessing ModalManager instance
-const modal = useModal<ModalTypes>();
 ```
 
-For example of other parts, please reference these:
+2. Implement modal components declared above.
 
-- [src/components/HelloModal.tsx](src/components/HelloModal.tsx)
-- [src/App.tsx](src/App.tsx)
+```tsx
+// HelloModal.tsx
+import { useModal, VueModal } from "@ztrehagem/vue-modal";
 
-`<VueModalRenderer>` is rendering container of modal components.
-`<VueModal>` is base of modal component, which provides css transition.
-`<VueModalBackdrop>` is backdrop of modals.
+export default defineComponent({
+  props: {
+    args: {
+      type: Object as PropType<ModalTypes["hello"]>,
+      required: true,
+    },
+  },
 
-`<VueModal>` and `<VueModalBackdrop>` can be replaced your components.
-In that case, please reference implementation of default components.
+  setup(props) {
+    const modal = useModal<ModalTypes>();
+
+    const closeModal = (e: Event) => {
+      e.preventDefault();
+      modal.pop();
+    };
+
+    return () => (
+      <VueModal>
+        <p>Hello, {props.args.nickname}!</p>
+
+        <button type="button" onClick={closeModal}>
+          closeModal
+        </button>
+      </VueModal>
+    );
+  },
+});
+```
+
+3. Implement root component.
+
+```tsx
+// App.tsx
+import {
+  useModal,
+  VueModalBackdrop,
+  VueModalRenderer,
+} from "@ztrehagem/vue-modal";
+
+export default defineComponent({
+  setup() {
+    const modal = useModal<ModalTypes>();
+
+    const nickname = ref("");
+
+    const openModal = (e: Event) => {
+      e.preventDefault();
+      modal.push("hello", { nickname: nickname.value });
+    };
+
+    return () => (
+      <div>
+        <input v-model={nickname.value} type="text" />
+
+        <button type="button" onClick={openModal}>
+          showModal
+        </button>
+
+        <VueModalBackdrop />
+        <VueModalRenderer />
+      </div>
+    );
+  },
+});
+```
+
+4. Create app instance and install plugin.
+
+```ts
+import { ModalManager } from "@ztrehagem/vue-modal";
+import HelloModal from "./HelloModal";
+import App from "./App";
+
+// Styles for <VueModal> and <VueModalBackdrop>.
+// If you don't use these library components, this is not required.
+import "@ztrehagem/vue-modal/style.css";
+
+const modalManager = new ModalManager<ModalTypes>();
+modalManager.addComponent("hello", HelloModal);
+
+// Dynamic import is available through async components.
+const asyncHelloModal = defineAsyncComponent(() => import("./HelloModal"));
+modalManager.addComponent("hello", asyncHelloModal);
+
+const app = createApp(App);
+app.use(modalManager);
+app.mount("#app");
+```
+
+See sources in this repo for example implementations of other parts,
+
+## Library Components
+
+- [`<VueModalRenderer>`](src/lib/VueModalRenderer.tsx) renders modal components with `<KeepAlive>` and `<Transition>`.
+- [`<VueModal>`](src/lib/VueModal.tsx) provides default styles for CSS transition of modal components. It is optional to use.
+- [`<VueModalBackdrop>`](src/lib/VueModalBackdrop.tsx) provides default styles for backdrop of modals. It is also optional to use.
 
 # API
 
