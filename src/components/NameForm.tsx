@@ -1,24 +1,32 @@
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, computed } from "vue";
 
 export default defineComponent({
   props: {
-    onSubmit: {
-      type: Function as PropType<(name: string) => void>,
+    name: {
+      type: String,
       required: true,
     },
   },
 
-  setup(props) {
-    const name = ref("");
+  emits: {
+    updateName: (name: string) => true,
+    submit: () => true,
+  },
+
+  setup(props, { emit }) {
+    const model = computed({
+      get: () => props.name,
+      set: (value: string) => emit("updateName", value),
+    });
 
     const submitHandler = (e: Event) => {
       e.preventDefault();
-      props.onSubmit(name.value);
+      emit("submit");
     };
 
     return () => (
       <form onSubmit={submitHandler}>
-        <input v-model={name.value} type="text" placeholder="your name" />
+        <input v-model={model.value} type="text" placeholder="your name" />
 
         <button type="submit">showModal</button>
       </form>
