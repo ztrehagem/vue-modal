@@ -9,10 +9,10 @@
   "author": {
     "email": "shigeki.suwa@ztrehagem.dev",
     "name": "Shigeki Suwa",
-    "url": "https://ztrehagem.dev/"
+    "url": "https://ztrehagem.dev"
   },
   "license": "MIT",
-  "homepage": "https://vue-modal.lib.ztrehagem.dev/",
+  "homepage": "https://vue-modal.lib.ztrehagem.dev",
   "bugs": "https://github.com/ztrehagem/vue-modal/issues",
   "repository": {
     "type": "git",
