@@ -10,7 +10,7 @@ Stacking-managed styleless modal library for Vue.js.
 # Installation
 
 ```sh
-npm install @ztrehagem/vue-modal@2
+npm install @ztrehagem/vue-modal
 ```
 
 # Features
