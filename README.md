@@ -7,22 +7,22 @@
 
 Stacking-managed styleless modal library for Vue.js.
 
-# Installation
+## Features
+
+The modals are managed as a stack structure with functions such as push and pop.
+Only the top of the stack is always rendered.
+State of stacked modals are kept for each instance by using `<KeepAlive>`.
+In addition, multiple instances of the same modal component can be in the stack.
+
+## Installation
 
 ```sh
 npm install @ztrehagem/vue-modal
 ```
 
-# Features
+## Usage
 
-The modals are managed as stack structure with functions such as push and pop.
-Only the top of stack is always rendered.
-State of stacked modals are kept for each instances by using `<keep-alive>`.
-In addition, multiple instances of same modal component can be in the stack.
-
-# Usage
-
-1. Declare all modal names and theirs argument schema.
+1. Declare all modal names and their argument schema.
    In this example, there is a modal named `hello` with an argument `{ nickname: string }`.
 
 ```tsx
@@ -66,7 +66,7 @@ export default defineComponent({
 });
 ```
 
-3. Implement root component.
+3. Implement calling those modals, and mount `<VueModalBackdrop>` and `<VueModalRenderer>` in the root component.
 
 ```tsx
 // App.tsx
@@ -92,7 +92,7 @@ export default defineComponent({
         <input v-model={nickname.value} type="text" />
 
         <button type="button" onClick={openModal}>
-          showModal
+          openModal
         </button>
 
         <VueModalBackdrop />
@@ -103,7 +103,7 @@ export default defineComponent({
 });
 ```
 
-4. Create app instance and install plugin.
+4. Create the ModalManager instance with the ModalTypes, and provide components for each name declared. Then install the instance to the vue app instance.
 
 ```ts
 import { ModalManager } from "@ztrehagem/vue-modal";
@@ -126,16 +126,16 @@ app.use(modalManager);
 app.mount("#app");
 ```
 
-See sources in this repo for example implementations of other parts,
+See [src](./src) in this repo for example usage.
 
-## Library Components
+### Library Components
 
 - [`<VueModalRenderer>`](src/lib/VueModalRenderer.tsx) renders modal components with `<KeepAlive>` and `<Transition>`.
 - [`<VueModal>`](src/lib/VueModal.tsx) provides default styles for CSS transition of modal components. It is optional to use.
 - [`<VueModalBackdrop>`](src/lib/VueModalBackdrop.tsx) provides default styles for backdrop of modals. It is also optional to use.
 
-# API
+## API
 
-## class `ModalManager`
+### class `ModalManager`
 
 - see [src/lib/ModalManager.ts](src/lib/ModalManager.ts)
